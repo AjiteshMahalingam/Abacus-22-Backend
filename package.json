@@ -1,0 +1,28 @@
+{
+  "name": "abacus-22-backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon ./src/app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AjiteshMahalingam/Abacus-22-Backend.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/AjiteshMahalingam/Abacus-22-Backend/issues"
+  },
+  "homepage": "https://github.com/AjiteshMahalingam/Abacus-22-Backend#readme",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "express": "^4.17.2",
+    "express-jwt": "^6.1.0",
+    "json-web-token": "^3.2.0",
+    "mongoose": "^6.1.6",
+    "validator": "^13.7.0"
+  }
+}
