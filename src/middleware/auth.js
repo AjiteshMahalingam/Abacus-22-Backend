@@ -5,13 +5,13 @@ const User = require('../models/User');
 const auth = async (req, res, next) => {
     // To retreive jwt from cookie
     jwtExp({
-        secret: 'ac780bcd612258fe876474db066bd186dd3d70a32cc173db964e',
+        secret: process.env.jwtSecret,
         algorithms: ['RS256'],
         getToken: req => req.cookies.token
     });
 
     try{
-        const decoded = jwt.verify(req.cookies.token, 'ac780bcd612258fe876474db066bd186dd3d70a32cc173db964e');
+        const decoded = jwt.verify(req.cookies.token, process.env.jwtSecret);
         var isAuth = false;
         const user = await User.findById(decoded._id);
         user.tokens.map(token => {

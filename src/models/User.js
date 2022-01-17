@@ -83,7 +83,7 @@ const UserSchema = new Schema({
 UserSchema.methods.generateAuthtoken = async function () {
     try {
         const user = this;
-        const token = await jwt.sign({_id : user._id.toString()}, 'ac780bcd612258fe876474db066bd186dd3d70a32cc173db964e');
+        const token = await jwt.sign({_id : user._id.toString()}, process.env.jwtSecret);
         return token;
     } catch (e) {
         throw new Error(e);
