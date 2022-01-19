@@ -36,9 +36,11 @@ router.post('/login', async(req, res) => {
         const token = await user.generateAuthtoken();
         user.tokens.push({ token });
         await user.save();
+        
         const isEqual = await bcrypt.compare(password, user.password);
         if(!isEqual)
             res.status(400).send("Invalid password");
+        
         console.log(user);
         res.status(200).send({ token: token });
 
@@ -46,8 +48,6 @@ router.post('/login', async(req, res) => {
         console.log(err);
         res.status(400).send(err);
     }
-
-
 });
 
 
