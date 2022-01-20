@@ -1,6 +1,7 @@
 const express = require('express');
 const dotenv = require('dotenv');
-const loginRouter = require('./routes/login');
+const loginRoutes = require('./routes/login');
+const session = require('express-session');
 
 dotenv.config();
 
@@ -15,8 +16,13 @@ const PORT = process.env.PORT;
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 
+app.use(session({ 
+    secret: 'SECRET',
+    resave: false,
+    saveUninitialized: true 
+}));
 
-app.use(loginRouter);
+app.use("/user", loginRoutes);
 
 app.listen(PORT, () => {
     console.log("The server is up at port " + PORT);
