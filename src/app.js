@@ -1,6 +1,10 @@
 const express = require('express');
+//const dotenv = require('dotenv');
+//dotenv.config();
+//!! the .env wasnt loading here so I had to add the path !!
+const path = require('path');
 const dotenv = require('dotenv');
-dotenv.config();
+dotenv.config({ path: path.resolve(__dirname, '../.env') });
 
 // Establishing DB Connection
 require('./utils/connectDB');
