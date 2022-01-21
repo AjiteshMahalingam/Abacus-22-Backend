@@ -31,26 +31,26 @@ const UserSchema = new Schema({
     },
     phoneNumber: {
         type: String,
-        required: true,
+        //required: true,
         trim: true
     },
     college: {
         type: String,
-        required: true,
+        //required: true,
         trim: true
     },
     year: {
         type: Number,
-        required: true
+        //required: true
     },
     department: {
         type: String,
-        required: true,
+       // required: true,
         trim: true
     },
     password: {
         type: String,
-        required: true,
+        //required: true,
         trim: true,
         minLength: 7,
     },

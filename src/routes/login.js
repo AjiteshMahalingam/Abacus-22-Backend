@@ -2,7 +2,7 @@ const express = require('express');
 const User = require('../models/User');
 const bcrypt = require('bcryptjs');
 const passport = require('passport');
-
+const gSignIn = require('./gSignIn');
 const router = new express.Router();
 require('../middleware/gAuth')(passport);
 
@@ -65,17 +65,20 @@ router.get("/login/google",
         })
 );
 
-router.get('/success', async(req, res) => {
-    res.status(200).send("FINALLY :))))");
-});
-
 router.get("/login/google/redirect",
         passport.authenticate("google", { 
                 failureRedirect: "/gautherror" 
         }), 
-        (req, res) => {
-            res.redirect("/success");
+        (err, req, res, next) => {
+            if(err) {
+                console.log(err); console.log("")
+                res.redirect("/login/google");
+        } else {
+            next();
         }
+    },
+    gSignIn.googleSignin
+        
         
 );
 
