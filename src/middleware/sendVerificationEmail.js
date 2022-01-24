@@ -18,6 +18,10 @@ transporter.verify((error, success) => {
 });
 
 module.exports = (user) => {
+  const code = user.generateVerificationCode();
+  user.save();
+
+  console.log(code);
   var mailOptions = {
     replyTo: process.env["NODEMAILER_EMAIL_ID"],
     to: user.email,

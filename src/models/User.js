@@ -90,7 +90,7 @@ const UserSchema = new Schema(
   }
 );
 
-UserSchema.methods.generateVerificationCode = async function () {
+UserSchema.methods.generateVerificationCode = function () {
   try {
     const code = uuidv4();
     this.verificationCode = code;
