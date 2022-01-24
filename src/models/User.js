@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
-const jwt = require('json-web-token');
+const jwt = require('jsonwebtoken');
 const validator = require('validator');
 
 const Schema = mongoose.Schema;
@@ -72,18 +72,18 @@ const UserSchema = new Schema({
             default: false
         }
     }],
-    isCegian : {
+    isCegian: {
         type: Boolean
     }
 }, {
     timestamps: true
-  });
+});
 
 
 UserSchema.methods.generateAuthtoken = async function () {
     try {
         const user = this;
-        const token = await jwt.sign({_id : user._id.toString()}, process.env.jwtSecret);
+        const token = await jwt.sign({ _id: user._id.toString() }, process.env.jwtSecret);
         return token;
     } catch (e) {
         throw new Error(e);
@@ -92,7 +92,7 @@ UserSchema.methods.generateAuthtoken = async function () {
 
 UserSchema.pre('save', async function (next) {
     const user = this;
-    if(user.isModified(password)){
+    if (user.isModified(password)) {
         user.password = await bcrypt.hash(user.password, 8);
     }
     next();
