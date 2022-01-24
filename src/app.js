@@ -1,3 +1,6 @@
+
+const path = require('path');
+
 const express = require("express");
 const dotenv = require("dotenv");
 const loginRoutes = require("./routes/login");
@@ -5,7 +8,8 @@ const signupRoutes = require("./routes/signup");
 const session = require("express-session");
 const auth = require('./middleware/auth');
 
-dotenv.config();
+dotenv.config({ path: path.resolve(__dirname, '../.env') });
+
 
 // Establishing DB Connection
 require("./utils/connectDB");
