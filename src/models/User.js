@@ -4,6 +4,7 @@ const jwt = require("jsonwebtoken");
 const validator = require("validator");
 const { v4: uuidv4 } = require("uuid");
 
+
 const Schema = mongoose.Schema;
 const UserSchema = new Schema(
   {
@@ -119,6 +120,7 @@ UserSchema.pre("save", async function (next) {
     user.password = await bcrypt.hash(user.password, 8);
   }
   next();
+
 });
 
 const User = mongoose.model("user", UserSchema);

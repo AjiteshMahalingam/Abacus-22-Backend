@@ -3,6 +3,7 @@ const dotenv = require("dotenv");
 const loginRoutes = require("./routes/login");
 const signupRoutes = require("./routes/signup");
 const session = require("express-session");
+const auth = require('./middleware/auth');
 
 dotenv.config();
 
@@ -30,6 +31,20 @@ app.get("/", (req, res) => {
 
 app.use("/user", loginRoutes);
 app.use("/user/signup", signupRoutes);
+
+/*
+app.post('/user/logout', auth, async (req, res) => {
+    try {
+        req.user.tokens = req.user.tokens.filter((token) => {
+            return token.token !== req.token;
+        })
+        await req.user.save();
+        res.send('Successfully logged out');
+    } catch (e) {
+        res.status(500).send();
+    }
+});
+*/
 
 app.listen(PORT, () => {
   console.log("The server is up at port " + PORT);
