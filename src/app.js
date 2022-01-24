@@ -1,6 +1,7 @@
 const express = require("express");
 const dotenv = require("dotenv");
 const loginRoutes = require("./routes/login");
+const signupRoutes = require("./routes/signup");
 const session = require("express-session");
 
 dotenv.config();
@@ -28,6 +29,7 @@ app.get("/", (req, res) => {
 });
 
 app.use("/user", loginRoutes);
+app.use("/user/signup", signupRoutes);
 
 app.listen(PORT, () => {
   console.log("The server is up at port " + PORT);

@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const validator = require("validator");
+const { v4: uuidv4 } = require("uuid");
 
 const Schema = mongoose.Schema;
 const UserSchema = new Schema(
@@ -55,6 +56,9 @@ const UserSchema = new Schema(
       trim: true,
       minLength: 7,
     },
+    verificationCode: {
+      type: String,
+    },
     isAccountVerified: {
       type: Boolean,
       default: false,
@@ -86,6 +90,16 @@ const UserSchema = new Schema(
   }
 );
 
+UserSchema.methods.generateVerificationCode = async function () {
+  try {
+    const code = uuidv4();
+    this.verificationCode = code;
+    return code;
+  } catch (e) {
+    throw new Error(e);
+  }
+};
+
 UserSchema.methods.generateAuthtoken = async function () {
   try {
     const user = this;
@@ -101,7 +115,7 @@ UserSchema.methods.generateAuthtoken = async function () {
 
 UserSchema.pre("save", async function (next) {
   const user = this;
-  if (user.isModified(password)) {
+  if (user.isModified(user.password)) {
     user.password = await bcrypt.hash(user.password, 8);
   }
   next();

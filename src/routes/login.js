@@ -6,35 +6,7 @@ const gSignIn = require("./gSignIn");
 const router = new express.Router();
 const { v4: uuidv4 } = require("uuid");
 require("../middleware/gAuth")(passport);
-
-//written for testing login
-router.post("/signup", async (req, res) => {
-  console.log(req.body);
-  const { email, name, phoneNumber, college, year, department, password } =
-    req.body;
-
-  const user = new User({
-    id: uuidv4(),
-    email,
-    name,
-    phoneNumber,
-    college,
-    year,
-    department,
-    password,
-  });
-  try {
-    user.password = await bcrypt.hash(user.password, 8);
-    await user.save();
-    // const token = await user.generateAuthToken();
-    //user.tokens.push({ token });
-    //await user.save();
-    res.status(201).send({ user });
-  } catch (err) {
-    console.log(err);
-    res.status(400).send(err);
-  }
-});
+const sendVerificationEmail = require("../middleware/sendVerificationEmail");
 
 //normal login
 router.post("/login", async (req, res) => {
@@ -42,20 +14,27 @@ router.post("/login", async (req, res) => {
 
   try {
     const user = await User.findOne({ email });
-    if (!user) res.status(400).send("User not found");
+    if (!user) return res.status(404).send("User not found");
 
     const isEqual = await bcrypt.compare(password, user.password);
-    if (!isEqual) res.status(400).send("Invalid password");
+    if (!isEqual) return res.status(400).send("Invalid password");
+
+    if (!user.isAccountVerified) {
+      sendVerificationEmail(user);
+      return res
+        .status(401)
+        .send({ message: "User Not Verified, sending mail again" });
+    }
 
     const token = await user.generateAuthtoken();
     user.tokens.push({ token });
     await user.save();
 
     console.log(user);
-    res.status(200).send({ token: token });
+    return res.status(200).send({ token: token });
   } catch (err) {
     console.log(err);
-    res.status(400).send(err);
+    return res.status(400).send(err);
   }
 });
 
