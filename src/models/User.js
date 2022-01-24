@@ -1,104 +1,129 @@
-const mongoose = require('mongoose');
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
-const validator = require('validator');
+const mongoose = require("mongoose");
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+const validator = require("validator");
+const { v4: uuidv4 } = require("uuid");
+
 
 const Schema = mongoose.Schema;
-const UserSchema = new Schema({
+const UserSchema = new Schema(
+  {
     id: {
-        type: String,
-        required: true,
-        trim: true
+      type: String,
+      required: true,
+      trim: true,
     },
     abacusId: {
-        type: Number,
-        default: 2022000
+      type: Number,
+      default: 2022000,
     },
     email: {
-        type: String,
-        required: true,
-        unique: true,
-        trim: true,
-        lowerCase: true,
-        validate(value) {
-            if (!validator.isEmail(value)) throw new Error("Enter valid email!!");
-        }
+      type: String,
+      required: true,
+      unique: true,
+      trim: true,
+      lowerCase: true,
+      validate(value) {
+        if (!validator.isEmail(value)) throw new Error("Enter valid email!!");
+      },
     },
     name: {
-        type: String,
-        required: true,
-        trim: true
+      type: String,
+      required: true,
+      trim: true,
     },
     phoneNumber: {
-        type: String,
-        required: true,
-        trim: true
+      type: String,
+      //required: true,
+      trim: true,
     },
     college: {
-        type: String,
-        required: true,
-        trim: true
+      type: String,
+      //required: true,
+      trim: true,
     },
     year: {
-        type: Number,
-        required: true
+      type: Number,
+      //required: true
     },
     department: {
-        type: String,
-        required: true,
-        trim: true
+      type: String,
+      // required: true,
+      trim: true,
     },
     password: {
-        type: String,
-        required: true,
-        trim: true,
-        minLength: 7,
+      type: String,
+      //required: true,
+      trim: true,
+      minLength: 7,
+    },
+    verificationCode: {
+      type: String,
     },
     isAccountVerified: {
-        type: Boolean,
-        default: false
+      type: Boolean,
+      default: false,
     },
-    tokens: [{
+    tokens: [
+      {
         token: {
-            type: String
-        }
-    }],
-    regList: [{
+          type: String,
+        },
+      },
+    ],
+    regList: [
+      {
         eventId: {
-            type: String
+          type: String,
         },
         isPaymentDone: {
-            type: Boolean,
-            default: false
-        }
-    }],
+          type: Boolean,
+          default: false,
+        },
+      },
+    ],
     isCegian: {
-        type: Boolean
-    }
-}, {
-    timestamps: true
-});
+      type: Boolean,
+    },
+  },
+  {
+    timestamps: true,
+  }
+);
 
-
-UserSchema.methods.generateAuthtoken = async function () {
-    try {
-        const user = this;
-        const token = await jwt.sign({ _id: user._id.toString() }, process.env.jwtSecret);
-        return token;
-    } catch (e) {
-        throw new Error(e);
-    }
+UserSchema.methods.generateVerificationCode = function () {
+  try {
+    const code = uuidv4();
+    this.verificationCode = code;
+    return code;
+  } catch (e) {
+    throw new Error(e);
+  }
 };
 
-UserSchema.pre('save', async function (next) {
+UserSchema.methods.generateAuthtoken = async function () {
+  try {
     const user = this;
-    if (user.isModified(password)) {
-        user.password = await bcrypt.hash(user.password, 8);
-    }
-    next();
+    const token = await jwt.sign(
+      { _id: user._id.toString() },
+      process.env.jwtSecret
+    );
+    return token;
+  } catch (e) {
+    throw new Error(e);
+  }
+};
+
+UserSchema.pre("save", async function (next) {
+  const user = this;
+  if (user.isModified(user.password)) {
+    user.password = await bcrypt.hash(user.password, 8);
+  }
+  next();
+
 });
 
-const User = mongoose.model('user', UserSchema);
+const User = mongoose.model("user", UserSchema);
 User.createIndexes();
 
 module.exports = User;
