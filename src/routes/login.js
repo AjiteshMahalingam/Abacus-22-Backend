@@ -5,7 +5,7 @@ const passport = require("passport");
 const gSignIn = require("./gSignIn");
 const router = new express.Router();
 const { v4: uuidv4 } = require("uuid");
-//require("../middleware/gAuth")(passport);
+require("../middleware/gAuth")(passport);
 const sendVerificationEmail = require("../middleware/sendVerificationEmail");
 
 //normal login
