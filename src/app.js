@@ -9,6 +9,8 @@ const loginRoutes = require("./routes/login");
 const signupRoutes = require("./routes/signup");
 const auth = require('./middleware/auth');
 
+const adminRoutes = require("./routes/admin");
+const session = require("express-session");
 
 // Establishing DB Connection
 require("./utils/connectDB");
@@ -32,20 +34,8 @@ app.get("/", (req, res) => {
 
 app.use("/user", loginRoutes);
 app.use("/user/signup", signupRoutes);
+app.use("/admin", adminRoutes);
 
-/*
-app.post('/user/logout', auth, async (req, res) => {
-    try {
-        req.user.tokens = req.user.tokens.filter((token) => {
-            return token.token !== req.token;
-        })
-        await req.user.save();
-        res.send('Successfully logged out');
-    } catch (e) {
-        res.status(500).send();
-    }
-});
-*/
 
 app.post("/forgetPassword",require("./routes/forgetPassword"));
 app.put("/resetPassword/:resetToken",require("./routes/resetPassword"));

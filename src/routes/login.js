@@ -6,6 +6,7 @@ const gSignIn = require("./gSignIn");
 const router = new express.Router();
 const { v4: uuidv4 } = require("uuid");
 require("../middleware/gAuth")(passport);
+const auth = require('../middleware/auth');
 const sendVerificationEmail = require("../middleware/sendVerificationEmail");
 
 //normal login
@@ -65,6 +66,19 @@ router.get(
 
 router.get("/gautherror", async (req, res) => {
   res.status(401).send({ error: "Google authentication error" });
+});
+
+// logout
+router.post('/logout', auth, async (req, res) => {
+  try {
+    req.user.tokens = req.user.tokens.filter((token) => {
+      return token.token !== req.token;
+    })
+    await req.user.save();
+    res.send('Successfully logged out');
+  } catch (e) {
+    res.status(500).send();
+  }
 });
 
 module.exports = router;
