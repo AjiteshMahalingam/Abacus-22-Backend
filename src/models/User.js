@@ -74,7 +74,18 @@ const UserSchema = new Schema({
     }],
     isCegian : {
         type: Boolean
+    },
+    
+    resetPasswordToken: {
+        type: String,
+        deafult : null 
+    },
+
+    resetPasswordExpireTime: {
+        type: Date,
+        default : null
     }
+
 }, {
     timestamps: true
   });
@@ -89,14 +100,6 @@ UserSchema.methods.generateAuthtoken = async function () {
         throw new Error(e);
     }
 };
-
-UserSchema.pre('save', async function (next) {
-    const user = this;
-    if(user.isModified(password)){
-        user.password = await bcrypt.hash(user.password, 8);
-    }
-    next();
-});
 
 const User = mongoose.model('user', UserSchema);
 User.createIndexes();
