@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
+const jwt = require("json-web-token");
 const validator = require("validator");
 const { v4: uuidv4 } = require("uuid");
 
@@ -77,21 +77,31 @@ const UserSchema = new Schema(
           type: String,
         },
         isPaymentDone: {
-          type: Boolean,
-          default: false,
+            type: Boolean,
+            default: false
         },
-      },
+      }
     ],
-    isCegian: {
-      type: Boolean,
+    isCegian : {
+        type: Boolean
     },
-  },
-  {
-    timestamps: true,
-  }
-);
+    
+    resetPasswordToken: {
+        type: String,
+        deafult : null 
+    },
 
-UserSchema.methods.generateVerificationCode = function () {
+    resetPasswordExpireTime: {
+        type: Date,
+        default : null
+    }
+
+}, 
+{
+    timestamps: true
+});
+          
+  UserSchema.methods.generateVerificationCode = function () {
   try {
     const code = uuidv4();
     this.verificationCode = code;
@@ -114,16 +124,7 @@ UserSchema.methods.generateAuthtoken = async function () {
   }
 };
 
-UserSchema.pre("save", async function (next) {
-  const user = this;
-  if (user.isModified(user.password)) {
-    user.password = await bcrypt.hash(user.password, 8);
-  }
-  next();
-
-});
-
-const User = mongoose.model("user", UserSchema);
+const User = mongoose.model('user', UserSchema);
 User.createIndexes();
 
 module.exports = User;
