@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
+const jwt = require("json-web-token");
 const validator = require("validator");
 const { v4: uuidv4 } = require("uuid");
 

@@ -5,6 +5,8 @@ const sendEmail = require("../middleware/mailer")
 const forgetPassword = async(req,res) => {
 
     try{
+
+        console.log("Forget Password")
         const datenow = Date.now();
         const email = req.body.email;
         const user = await User.findOne({ email });
@@ -25,7 +27,8 @@ const forgetPassword = async(req,res) => {
         await sendEmail({
             subject : "Request for password Reset",
             html: `<p>Use this link to reset your password <a href="${url}">Reset Password</a></p>
-                   <p>Alternately you can use the following link <a href='${url}'>${url}</a></p>`,
+                   <p>Alternately you can use the following link <a href='${url}'>${url}</a></p>
+                   <p>The link will expire in 10 minutes</p>`,
             to : email
         })
         console.log("Response sent to user")
