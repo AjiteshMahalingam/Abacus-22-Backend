@@ -27,16 +27,18 @@ router.get('/getdata', async (req, res) => {
 
         const reqEvent = events.find(e => e.id === eventid);
         if (!reqEvent) {
-            res.status(400).send({ error: 'Invalid event id' });
+            res.send({ error: 'Invalid event id' });
+            return;
         }
         if (reqEvent.password !== password) {
-            res.status(400).send({ error: 'Incorrect event access credentials' });
+            res.send({ error: 'Incorrect event access credentials' });
+            return;
         }
 
         const data = await Registration.find({ eventId: eventid });
         res.send(data);
     } catch (e) {
-        res.status(500).send(e.message);
+        res.send(e.message);
     }
 });
 
