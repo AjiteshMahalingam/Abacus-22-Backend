@@ -27,6 +27,7 @@ module.exports = (user) => {
     replyTo: process.env["NODEMAILER_EMAIL_ID"],
     to: user.email,
     subject: "Verify Email - Abacus '22",
+    from: `${process.env.NAME}  ${process.env.EMAIL}`,
     html: `
       <div id="EmailBody">
         <h2>Welcome to Abacus'22</h2>
