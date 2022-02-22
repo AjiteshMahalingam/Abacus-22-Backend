@@ -1,5 +1,6 @@
 const bcryptjs = require("bcryptjs");
 const nodemailer = require("nodemailer");
+const mailer = require("./mailer");
 require("dotenv").config();
 
 const transporter = nodemailer.createTransport({
@@ -49,15 +50,17 @@ module.exports = (user) => {
       </div>`,
   };
 
+  // mailer(mailOptions);
+
   transporter.sendMail(mailOptions, (err, data) => {
     if (err) {
-      res.send({
+      console.log({
         status: "Failed",
         msg: err,
       });
     } else {
-      console.log("message sent");
-      res.send({
+      // console.log("message sent");
+      console.log({
         status: "success",
       });
     }
