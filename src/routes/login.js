@@ -6,7 +6,7 @@ const gSignIn = require("./gSignIn");
 const router = new express.Router();
 const { v4: uuidv4 } = require("uuid");
 require("../middleware/gAuth")(passport);
-const auth = require('../middleware/auth');
+const auth = require("../middleware/auth");
 const sendVerificationEmail = require("../middleware/sendVerificationEmail");
 
 //normal login
@@ -35,7 +35,7 @@ router.post("/login", async (req, res) => {
     return res.status(200).send({ token: token });
   } catch (err) {
     console.log(err);
-    return res.status(400).send(err);
+    return res.status(400).send({ error: err });
   }
 });
 
@@ -69,13 +69,13 @@ router.get("/gautherror", async (req, res) => {
 });
 
 // logout
-router.post('/logout', auth, async (req, res) => {
+router.post("/logout", auth, async (req, res) => {
   try {
     req.user.tokens = req.user.tokens.filter((token) => {
       return token.token !== req.token;
-    })
+    });
     await req.user.save();
-    res.send('Successfully logged out');
+    res.send("Successfully logged out");
   } catch (e) {
     res.status(500).send();
   }
