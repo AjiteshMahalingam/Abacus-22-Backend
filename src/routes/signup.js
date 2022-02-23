@@ -28,10 +28,13 @@ router.post("/newUser", async (req, res) => {
     sendVerificationEmail(user);
     res
       .status(201)
-      .send({ user, message: "Verification mail has been sent to your email" });
+      .send({
+        message:
+          "Verification mail has been sent to your email. Check the mail before logging in",
+      });
   } catch (err) {
-    console.log(err);
-    res.status(400).send(err);
+    console.log(err.code);
+    res.status(406).send(err);
   }
 });
 

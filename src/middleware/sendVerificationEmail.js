@@ -40,12 +40,12 @@ module.exports = (user) => {
         <br />
         <p>
           Click on this
-          <a href="http://localhost:3000/user/signup/verifyUser?email=${user.email}&code=${user.verificationCode}">link</a> or
+          <a href="https://abacus-22-backend.herokuapp.com/user/signup/verifyUser?email=${user.email}&code=${user.verificationCode}">link</a> or
           copy paste the following in your browser URL to verify your account.
         </p>
         <p>
-          <a href="http://localhost:3000/user/signup/verifyUser?email=${user.email}&code=${user.verificationCode}">
-            http://localhost:3000/user/signup/verifyUser?email=${user.email}&code=${user.verificationCode}
+          <a href="https://abacus-22-backend.herokuapp.com/user/signup/verifyUser?email=${user.email}&code=${user.verificationCode}">
+          https://abacus-22-backend.herokuapp.com/user/signup/verifyUser?email=${user.email}&code=${user.verificationCode}
           </a>
         </p>
       </div>`,
