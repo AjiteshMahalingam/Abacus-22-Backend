@@ -26,12 +26,10 @@ router.post("/newUser", async (req, res) => {
     await user.generateVerificationCode();
     await user.save();
     sendVerificationEmail(user);
-    res
-      .status(201)
-      .send({
-        message:
-          "Verification mail has been sent to your email. Check the mail before logging in",
-      });
+    res.status(201).send({
+      message:
+        "Verification mail has been sent to your email. Check the mail before logging in",
+    });
   } catch (err) {
     console.log(err.code);
     res.status(406).send(err);
@@ -58,10 +56,9 @@ router.post("/updateExisting", async (req, res) => {
   }
 });
 
-router.get("/verifyUser", async (req, res) => {
-  // res.send(req.query);
-
-  const data = req.query;
+router.post("/verifyUser", async (req, res) => {
+  console.log(req.body);
+  const data = req.body;
   try {
     const user = await User.findOne({ email: data.email });
     if (!user) {
@@ -70,9 +67,7 @@ router.get("/verifyUser", async (req, res) => {
       if (user.verificationCode === data.code) {
         user.isAccountVerified = true;
         await user.save();
-        return res
-          .status(200)
-          .send({ user: user, message: "User has been verified" });
+        return res.status(200).send({ message: "User has been verified" });
       } else {
         return res.status(403).send({ message: "Wrong verification Code" });
       }
