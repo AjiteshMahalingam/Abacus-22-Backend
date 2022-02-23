@@ -3,7 +3,6 @@ const User = require("../models/User");
 const bcrypt = require("bcryptjs");
 // const passport = require("passport");
 const router = new express.Router();
-const { v4: uuidv4 } = require("uuid");
 const sendVerificationEmail = require("../middleware/sendVerificationEmail");
 
 router.post("/newUser", async (req, res) => {
@@ -12,7 +11,6 @@ router.post("/newUser", async (req, res) => {
     req.body;
 
   const user = new User({
-    id: uuidv4(),
     email,
     name,
     phoneNumber,

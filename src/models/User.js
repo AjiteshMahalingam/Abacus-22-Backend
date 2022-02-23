@@ -7,11 +7,6 @@ const { v4: uuidv4 } = require("uuid");
 const Schema = mongoose.Schema;
 const UserSchema = new Schema(
   {
-    id: {
-      type: String,
-      required: true,
-      trim: true,
-    },
     abacusId: {
       type: Number,
       default: 2022000,
@@ -70,17 +65,6 @@ const UserSchema = new Schema(
         },
       },
     ],
-    regList: [
-      {
-        eventId: {
-          type: String,
-        },
-        isPaymentDone: {
-          type: Boolean,
-          default: false,
-        },
-      },
-    ],
     isCegian: {
       type: Boolean,
     },
@@ -94,6 +78,10 @@ const UserSchema = new Schema(
       type: Date,
       default: null,
     },
+    cart: {
+      type: Array,
+      default: []
+    }
   },
   {
     timestamps: true,

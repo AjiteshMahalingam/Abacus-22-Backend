@@ -7,9 +7,9 @@ dotenv.config({ path: path.resolve(__dirname, "../.env") });
 
 const loginRoutes = require("./routes/login");
 const signupRoutes = require("./routes/signup");
-const auth = require("./middleware/auth");
-
+const registerRoutes = require('./routes/registrations');
 const adminRoutes = require("./routes/admin");
+const cartRoutes = require('./routes/cart');
 const cors = require("cors");
 // const session = require("express-session");
 
@@ -39,9 +39,11 @@ app.get("/", (req, res) => {
   res.status(200).send({ message: "All working well" });
 });
 
+app.use("/admin", adminRoutes);
 app.use("/user", loginRoutes);
 app.use("/user/signup", signupRoutes);
-app.use("/admin", adminRoutes);
+app.use("/user/registrations", registerRoutes)
+app.use("/user/cart", cartRoutes)
 
 app.post("/forgetPassword", require("./routes/forgetPassword"));
 app.put("/resetPassword/:resetToken", require("./routes/resetPassword"));
