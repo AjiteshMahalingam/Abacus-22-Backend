@@ -1,5 +1,6 @@
 const express = require("express");
 const router = new express.Router();
+const auth = require('../middleware/auth');
 
 // @desc Get cart contents
 // @route GET /user/cart
