@@ -6,8 +6,8 @@ module.exports = (passport) => {
   passport.use(
     new GoogleStrategy(
       {
-        clientID: process.env["CLIENT_ID"],
-        clientSecret: process.env["CLIENT_SECRET"],
+        clientID: process.env["PRANAV_CLIENT_ID"],
+        clientSecret: process.env["PRANAV_CLIENT_SECRET"],
         callbackURL:
           "https://abacus-22-backend.herokuapp.com/user/login/google/redirect",
       },
