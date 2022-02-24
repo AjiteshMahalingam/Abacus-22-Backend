@@ -17,7 +17,7 @@ const googleSignin = async (req, res, next) => {
           email: user.email,
           name: req.user._json.name,
           auth: true,
-          type: "signing",
+          type: "signin",
           token,
         });
       } else {
@@ -36,7 +36,7 @@ const googleSignin = async (req, res, next) => {
       });
 
       try {
-        const token = await genToken(user);
+        // const token = await genToken(user);
         return res.redirect(
           "http://localhost:3000/Login#/" +
             url.format({
@@ -47,7 +47,7 @@ const googleSignin = async (req, res, next) => {
                 name: user.name,
                 type: "signup",
                 googleAuth: true,
-                token,
+                // token,
               },
             })
         );

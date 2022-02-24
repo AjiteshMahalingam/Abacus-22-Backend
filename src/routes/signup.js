@@ -36,7 +36,9 @@ router.post("/newUser", async (req, res) => {
 
 // Todo: user verification for updation of data
 router.post("/updateExisting", async (req, res) => {
-  const { email, name, phoneNumber, college, year, department } = req.body;
+  const { email, name, phoneNumber, college, year, department, googleAuth } =
+    req.body;
+  console.log(googleAuth);
 
   try {
     var user = await User.findOne({ email });
@@ -46,8 +48,19 @@ router.post("/updateExisting", async (req, res) => {
     user.college = college;
     user.year = year;
     user.department = department;
+
+    if (req.body.password != undefined) {
+      user.password = await bcrypt.hash(req.body.password, 8);
+    }
+
+    if (googleAuth) {
+      user.isAccountVerified = true;
+    }
     await user.save();
-    return res.status(200).send({ message: "User Updated" });
+    console.log("user: " + user.email + " updated");
+    return res
+      .status(200)
+      .send({ message: "User has been " + (googleAuth ? "added" : "updated") });
   } catch (e) {
     console.log(e);
     return res.status(400).send(e);
