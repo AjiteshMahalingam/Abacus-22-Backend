@@ -38,7 +38,7 @@ const googleSignin = async (req, res, next) => {
           const code = user.generateVerificationCode();
           try {
             // const token = await genToken(user);
-            await user.save();
+            user.save();
             return res.redirect(
               "http://localhost:3000/Login/" +
                 url.format({
