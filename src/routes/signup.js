@@ -1,7 +1,7 @@
 const express = require("express");
 const User = require("../models/User");
 const bcrypt = require("bcryptjs");
-// const passport = require("passport");
+const auth = require("../middleware/auth");
 const router = new express.Router();
 const sendVerificationEmail = require("../middleware/sendVerificationEmail");
 
@@ -35,10 +35,45 @@ router.post("/newUser", async (req, res) => {
 });
 
 // Todo: user verification for updation of data
-router.post("/updateExisting", async (req, res) => {
-  const { email, name, phoneNumber, college, year, department, googleAuth } =
-    req.body;
-  console.log(googleAuth);
+
+router.post("/googleSignUp", async (req, res) => {
+  const {
+    email,
+    name,
+    phoneNumber,
+    college,
+    year,
+    department,
+    password,
+    verificationCode,
+  } = req.body;
+  try {
+    var user = await User.findOne({ email });
+
+    if (user.verificationCode === verificationCode) {
+      user.name = name;
+      user.phoneNumber = phoneNumber;
+      user.college = college;
+      user.year = year;
+      user.department = department;
+
+      user.password = await bcrypt.hash(password, 8);
+
+      await user.save();
+      console.log("Google Sign Up for : " + user.email);
+      return res.status(200).send({
+        message: "User has been registered. Kindly login.",
+      });
+    }
+  } catch (e) {
+    console.log(e);
+    return res.status(400).send(e);
+  }
+});
+
+router.post("/updateExisting", auth, async (req, res) => {
+  const { email, name, phoneNumber, college, year, department } = req.body;
+  // console.log(googleAuth);
 
   try {
     var user = await User.findOne({ email });
@@ -49,18 +84,9 @@ router.post("/updateExisting", async (req, res) => {
     user.year = year;
     user.department = department;
 
-    if (req.body.password != undefined) {
-      user.password = await bcrypt.hash(req.body.password, 8);
-    }
-
-    if (googleAuth) {
-      user.isAccountVerified = true;
-    }
     await user.save();
     console.log("user: " + user.email + " updated");
-    return res
-      .status(200)
-      .send({ message: "User has been " + (googleAuth ? "added" : "updated") });
+    return res.status(200).send({ message: "User has been updated" });
   } catch (e) {
     console.log(e);
     return res.status(400).send(e);

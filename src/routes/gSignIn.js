@@ -29,33 +29,42 @@ const googleSignin = async (req, res, next) => {
       }
     } else {
       // sign up new user
-      const user = new User({
+      User.create({
         // id: uuidv4(),
         email,
         name: req.user.displayName,
-      });
-
-      try {
-        // const token = await genToken(user);
-        return res.redirect(
-          "http://localhost:3000/Login#/" +
-            url.format({
-              query: {
-                message:
-                  "User profile created successfully, continue filling your information to login.",
-                email: user.email,
-                name: user.name,
-                type: "signup",
-                googleAuth: true,
-                // token,
-              },
-            })
-        );
-      } catch {
-        return res
-          .status(400)
-          .send({ message: "Server Error, new user not created" });
-      }
+      })
+        .then((user) => {
+          const code = user.generateVerificationCode();
+          try {
+            // const token = await genToken(user);
+            await user.save();
+            return res.redirect(
+              "http://localhost:3000/Login/" +
+                url.format({
+                  query: {
+                    message:
+                      "User profile created successfully, continue filling your information to login.",
+                    email: user.email,
+                    name: user.name,
+                    type: "signup",
+                    googleAuth: true,
+                    verificationCode: code,
+                    // token,
+                  },
+                })
+            );
+          } catch {
+            return res
+              .status(400)
+              .send({ message: "Server Error, new user not created" });
+          }
+        })
+        .catch((e) => {
+          return res
+            .status(400)
+            .send({ message: "Server Error, new user not created", error: e });
+        });
     }
   } catch (err) {
     console.log(err);
