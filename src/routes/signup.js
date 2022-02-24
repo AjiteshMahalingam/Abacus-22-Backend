@@ -58,6 +58,7 @@ router.post("/googleSignUp", async (req, res) => {
       user.department = department;
 
       user.password = await bcrypt.hash(password, 8);
+      user.isAccountVerified = true;
 
       await user.save();
       console.log("Google Sign Up for : " + user.email);
