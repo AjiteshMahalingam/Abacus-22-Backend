@@ -2,6 +2,7 @@ const User = require("../models/User");
 const { v4: uuidv4 } = require("uuid");
 const { genToken } = require("../helper/genToken");
 const sendVerificationEmail = require("../middleware/sendVerificationEmail");
+const url = require("url");
 
 //both google signin and signup
 const googleSignin = async (req, res, next) => {
@@ -16,6 +17,7 @@ const googleSignin = async (req, res, next) => {
           email: user.email,
           name: req.user._json.name,
           auth: true,
+          type: "signing",
           token,
         });
       } else {
@@ -28,21 +30,25 @@ const googleSignin = async (req, res, next) => {
     } else {
       // sign up new user
       user = new User({
-        id: uuidv4(),
+        // id: uuidv4(),
         email,
         name: req.user.displayName,
       });
 
       try {
         const token = await genToken(user);
-        return res.status(200).send({
-          message:
-            "User profile created successfully, continue filling your information to login.",
-          email: user.email,
-          name: user.name,
-          auth: true,
-          token,
-        });
+        return res.redirect(
+          "http://localhost:3000/Login#/" +
+            url.format({
+              message:
+                "User profile created successfully, continue filling your information to login.",
+              email: user.email,
+              name: user.name,
+              type: "signup",
+              googleAuth: true,
+              token,
+            })
+        );
       } catch {
         return res.status(400).send({ message: "Server Error" });
       }

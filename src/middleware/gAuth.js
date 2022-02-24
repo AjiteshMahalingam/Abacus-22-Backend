@@ -9,6 +9,7 @@ module.exports = (passport) => {
         clientID: process.env["PRANAV_CLIENT_ID"],
         clientSecret: process.env["PRANAV_CLIENT_SECRET"],
         callbackURL:
+          // "http://localhost:8000/user/login/google/redirect",
           "https://abacus-22-backend.herokuapp.com/user/login/google/redirect",
       },
       function (accessToken, refreshToken, profile, done) {

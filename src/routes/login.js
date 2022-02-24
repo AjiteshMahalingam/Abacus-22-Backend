@@ -49,6 +49,7 @@ router.get(
   "/login/google",
   passport.authenticate("google", {
     scope: ["profile", "email"],
+    // successRedirect: "http://localhost:8000/user/login/google/redirect",
   })
 );
 
