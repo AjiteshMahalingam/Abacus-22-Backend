@@ -15,16 +15,21 @@ router.post("/login", async (req, res) => {
 
   try {
     const user = await User.findOne({ email });
-    if (!user) return res.status(404).send({ message: "User not found" });
+    if (!user)
+      return res
+        .status(404)
+        .send({ message: "User not found, please register to continue." });
 
     const isEqual = await bcrypt.compare(password, user.password);
-    if (!isEqual) return res.status(400).send({ message: "Invalid password" });
+    if (!isEqual)
+      return res.status(400).send({ message: "Invalid password. Try again." });
 
     if (!user.isAccountVerified) {
       sendVerificationEmail(user);
-      return res
-        .status(401)
-        .send({ message: "User Not Verified, sending mail again" });
+      return res.status(401).send({
+        message:
+          "User Not Verified, sending mail again. Please verify user to continue.",
+      });
     }
 
     const token = await user.generateAuthtoken();
