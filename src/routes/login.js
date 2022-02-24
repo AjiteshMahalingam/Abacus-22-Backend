@@ -15,10 +15,10 @@ router.post("/login", async (req, res) => {
 
   try {
     const user = await User.findOne({ email });
-    if (!user) return res.status(404).send("User not found");
+    if (!user) return res.status(404).send({ message: "User not found" });
 
     const isEqual = await bcrypt.compare(password, user.password);
-    if (!isEqual) return res.status(400).send("Invalid password");
+    if (!isEqual) return res.status(400).send({ message: "Invalid password" });
 
     if (!user.isAccountVerified) {
       sendVerificationEmail(user);
@@ -35,7 +35,7 @@ router.post("/login", async (req, res) => {
     return res.status(200).send({ token: token });
   } catch (err) {
     console.log(err);
-    return res.status(400).send({ error: err });
+    return res.status(400).send({ message: err });
   }
 });
 
