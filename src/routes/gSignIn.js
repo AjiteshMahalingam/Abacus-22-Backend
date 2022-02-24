@@ -29,7 +29,7 @@ const googleSignin = async (req, res, next) => {
       }
     } else {
       // sign up new user
-      user = new User({
+      const user = new User({
         // id: uuidv4(),
         email,
         name: req.user.displayName,
@@ -50,12 +50,16 @@ const googleSignin = async (req, res, next) => {
             })
         );
       } catch {
-        return res.status(400).send({ message: "Server Error" });
+        return res
+          .status(400)
+          .send({ message: "Server Error, new user not created" });
       }
     }
   } catch (err) {
     console.log(err);
-    return res.status(500).send({ message: "Server Error." });
+    return res
+      .status(500)
+      .send({ message: "Server Error, needs to be checked" });
   }
 };
 
