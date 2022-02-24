@@ -40,13 +40,15 @@ const googleSignin = async (req, res, next) => {
         return res.redirect(
           "http://localhost:3000/Login#/" +
             url.format({
-              message:
-                "User profile created successfully, continue filling your information to login.",
-              email: user.email,
-              name: user.name,
-              type: "signup",
-              googleAuth: true,
-              token,
+              query: {
+                message:
+                  "User profile created successfully, continue filling your information to login.",
+                email: user.email,
+                name: user.name,
+                type: "signup",
+                googleAuth: true,
+                token,
+              },
             })
         );
       } catch {
