@@ -12,13 +12,14 @@ const googleSignin = async (req, res, next) => {
     if (user) {
       if (user.isAccountVerified) {
         const token = genToken(user);
+        console.log("token is ==", token);
         return res.status(200).send({
           message: "User login successful.",
           email: user.email,
           name: req.user._json.name,
           auth: true,
           type: "signin",
-          token,
+          token: user.token,
         });
       } else {
         // incase the user has registered but not verified
