@@ -11,22 +11,28 @@ const googleSignin = async (req, res, next) => {
     const user = await User.findOne({ email });
     if (user) {
       if (user.isAccountVerified) {
-        const token = genToken(user);
+        const token = await genToken(user);
         console.log("token is ==", token);
-        return res.status(200).send({
-          message: "User login successful.",
-          email: user.email,
-          name: req.user._json.name,
-          auth: true,
-          type: "signin",
-          token: user.token,
-        });
+        const link = new URL(`http://localhost:3000/Login#/sign-in`);
+        link.searchParams.append(
+          "message",
+          "Login success, for token check console."
+        );
+        link.searchParams.append("email", `${user.email}`);
+        link.searchParams.append("name", `${user.name}`);
+        link.searchParams.append("type", "signin");
+        link.searchParams.append("token", `${token}`);
+        console.log("link is ", link.href);
+        return res.redirect(link);
       } else {
         // incase the user has registered but not verified
         sendVerificationEmail(user);
-        return res.status(401).send({
-          message: "User not yet authenticated. Mail has been resent.",
-        });
+        const link = new URL(`http://localhost:3000/Login#/sign-in`);
+        link.searchParams.append(
+          "message",
+          "User  not verified yet, verification mail sent again. Please verify to continue."
+        );
+        return res.redirect(link);
       }
     } else {
       // sign up new user
