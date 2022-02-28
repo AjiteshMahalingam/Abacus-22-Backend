@@ -52,10 +52,14 @@ const createTransporter = async () => {
 };
 
 const unsecureTransporter = nodemailer.createTransport({
+  host: "smtp.gmail.com",
   service: "gmail",
   auth: {
     user: process.env["NODEMAILER_EMAIL_ID"],
     pass: process.env["NODEMAILER_PWD"],
+  },
+  tls: {
+    rejectUnauthorized: false,
   },
 });
 unsecureTransporter.verify((error, success) => {

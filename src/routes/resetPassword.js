@@ -6,29 +6,30 @@ const bcrypt = require("bcryptjs");
 const resetPassword = async(req,res) => {
 
     try{
-
-        console.log("Resetting password")
         const datenow = new Date();
 
         const {pass, confirmPass} = req.body;
         const resetPasswordToken = crypto.createHash('sha256').update(req.params.resetToken).digest('hex');
 
+        console.log(req.params.resetToken)
         const user = await User.findOne({ resetPasswordToken });
 
         if(user===null || user.resetPasswordExpireTime<datenow){
-            res.status(400).send("Invalid Reset Link");
+            res.status(400).send({message : "Invalid Reset Link"});
             console.log("User gave an invalid reset link")
             return;
         }
 
         if(pass!=confirmPass){
-            res.status(400).send("New password and confirm password do not match");
+            res.status(400).send({message : "New password and confirm password do not match"});
             console.log("User gave an invalid new and confirm password")
             return;
         }
 
+        console.log(pass)
+        console.log(confirmPass)
         if(pass.length<7){
-            res.status(400).send("Password should have atleast 7 characters.")
+            res.status(400).send({message : "Password should have atleast 7 characters."})
             console.log("User's password do not meet specified conditions");
             return;
         }
@@ -46,11 +47,11 @@ const resetPassword = async(req,res) => {
         });
         console.log("Response sent to user");
 
-        res.status(200).send("Password updated. Confirmation email sent");
+        res.status(200).send({message : "Password updated. Confirmation email sent"});
     }
     catch(error){
         console.log(error)
-        res.status(400).send("Unable to reset password");
+        res.status(400).send({message : "Unable to reset password"});
     }
 
 }
