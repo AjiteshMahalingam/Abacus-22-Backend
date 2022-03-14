@@ -7,7 +7,7 @@ const router = new express.Router();
 const { v4: uuidv4 } = require("uuid");
 require("../middleware/gAuth")(passport);
 const auth = require("../middleware/auth");
-const sendVerificationEmail = require("../middleware/sendVerificationEmail");
+const { sendVerificationEmail } = require("../middleware/mailer");
 
 //normal login
 router.post("/login", async (req, res) => {
