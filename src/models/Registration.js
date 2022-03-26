@@ -8,17 +8,18 @@ const RegistrationSchema = new Schema(
       required: true,
       trim: true,
     },
-    userId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "user",
+    email: {
+      type: String,
       required: true,
+      trim: true,
+      lowerCase: true,
     },
     isPaymentDone: {
       type: Boolean,
       default: false,
     },
     paymentId: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: String,
       ref: "payment",
     },
   },

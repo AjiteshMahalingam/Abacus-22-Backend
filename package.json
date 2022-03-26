@@ -34,7 +34,6 @@
     "node-jwa": "^1.0.1",
     "nodejs-self-signed-certificate-example": "^1.1.2",
     "nodemailer": "^6.7.2",
-    "nodemon": "^2.0.15",
     "passport": "^0.5.2",
     "passport-google-oauth20": "^2.0.0",
     "path": "^0.12.7",

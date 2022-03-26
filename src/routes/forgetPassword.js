@@ -28,7 +28,7 @@ const forgetPassword = async(req,res) => {
         await user.save();
 
         const url = `${req.protocol}://localhost:3000/resetPassword/${token}` //had to change the url acc. to ther front end port
-
+        console.log(url)
         await sendEmail({
             subject : "Request for password Reset",
             html: `<p>Use this link to reset your password <a href="${url}">Reset Password</a></p>
