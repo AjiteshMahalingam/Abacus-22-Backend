@@ -9,7 +9,8 @@ const UserSchema = new Schema(
   {
     abacusId: {
       type: Number,
-      default: 2022000,
+      required: true,
+      // unique: true,
     },
     email: {
       type: String,
@@ -80,8 +81,8 @@ const UserSchema = new Schema(
     },
     cart: {
       type: Array,
-      default: []
-    }
+      default: [],
+    },
   },
   {
     timestamps: true,

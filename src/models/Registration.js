@@ -13,6 +13,10 @@ const RegistrationSchema = new Schema(
       ref: "user",
       required: true,
     },
+    type: {
+      type: String,
+      required: true,
+    },
     isPaymentDone: {
       type: Boolean,
       default: false,

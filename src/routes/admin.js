@@ -1,6 +1,7 @@
 const express = require("express");
 const Registration = require("../models/Registration");
 const auth = require("../middleware/auth");
+const csvwriter = require("csv-writer");
 
 const router = new express.Router();
 
@@ -38,7 +39,37 @@ router.get("/getdata", async (req, res) => {
     }
 
     const data = await Registration.find({ eventId: eventid });
-    res.send(data);
+
+    // const csvString = [
+    //   ["ID", "Event ID", "User ID", "Type", "Payment Done", "Payment ID"],
+    //   ...data.map((item) => [item._id.toString(), item.eventId, item.userId, item.type, item.isPaymentDone, item.paymentId]),
+    // ]
+    //   .map((e) => e.join(","))
+    //   .join("\n");
+
+    // console.log(csvString);
+
+    const path = "registrations-details.csv";
+    const csvWriter = csvwriter.createObjectCsvWriter({
+      path: path,
+      header: [
+        { id: "_id", title: "ID" },
+        { id: "eventId", title: "Event id" },
+        { id: "userId", title: "User id" },
+        { id: "type", title: "Type" },
+        { id: "isPaymentDone", title: "Payment done" },
+        { id: "paymentId", title: "Payment Id" },
+      ],
+    });
+
+    res.setHeader(
+      "Content-disposition",
+      "attachment; filename=registrations-details.csv"
+    );
+    res.set("Content-Type", "text/csv");
+    csvWriter.writeRecords(userLogsArray).then(() => {
+      res.download(path);
+    });
   } catch (e) {
     res.send(e.message);
   }
