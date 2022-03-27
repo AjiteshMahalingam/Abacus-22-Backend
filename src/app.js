@@ -13,6 +13,7 @@ const cartRoutes = require("./routes/cart");
 const eventpassRoutes = require('./routes/eventpass');
 const paymentRoutes = require("./routes/payment");
 const registerRoutes = require("./routes/registerEvent");
+const getDetailsRoutes = require("./routes/getDetails");
 const cors = require("cors");
 // const session = require("express-session");
 
@@ -50,6 +51,7 @@ app.use("/user/cart", cartRoutes);
 app.use("/user/geteventpass",eventpassRoutes);
 app.use("user/payment",paymentRoutes);
 app.use("/user/registration/",registerRoutes);
+app.use("/user/getDetails",getDetailsRoutes);
 
 app.post("/forgetPassword", require("./routes/forgetPassword"));
 app.put("/resetPassword/:resetToken", require("./routes/resetPassword"));

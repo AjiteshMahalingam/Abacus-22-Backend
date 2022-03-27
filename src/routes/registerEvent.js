@@ -6,19 +6,19 @@ const Registration = require("../models/Registration");
 
 const router = new express.Router();
 
-router.get('/:id/add', auth, async(req,res) => {
+router.put('/:id/add', auth, async(req,res) => {
     try
     {
         const id = req.params.id;
         const registration = await Registration.findOne({ eventId:id, email:req.user.email });
         if(registration){
-            res.status(200).send("Already Registered for event");
+            res.status(200).send({message : "Already Registered for event"});
             return;
         }
 
         const user = await User.findOne({ email : req.user.email });
         if(user.eventPass == false){
-            res.status(400).send("Event pass not retrieved");
+            res.status(400).send({message : "Event pass not retrieved"});
             return;
         }
 
@@ -30,12 +30,12 @@ router.get('/:id/add', auth, async(req,res) => {
         });
         await register.save();
 
-        res.status(200).send("Event added for " + req.user.email);
+        res.status(200).send({message : "Event added for " + req.user.email});
         return;
     }
     catch(err){
         console.log(err);
-        res.status(400).send("Unable to register to event")
+        res.status(400).send({message : "Unable to register to event"})
     }
 });
 
