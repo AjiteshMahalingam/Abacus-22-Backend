@@ -67,7 +67,7 @@ router.get("/getdata", async (req, res) => {
       "attachment; filename=registrations-details.csv"
     );
     res.set("Content-Type", "text/csv");
-    csvWriter.writeRecords(userLogsArray).then(() => {
+    csvWriter.writeRecords(data).then(() => {
       res.download(path);
     });
   } catch (e) {
