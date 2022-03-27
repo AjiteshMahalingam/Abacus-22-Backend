@@ -66,7 +66,7 @@ mailTransporter.verify((error, success) => {
   if (error) {
     console.log(error);
   } else {
-    console.log("All works fine - forget");
+    console.log("Mailer works fine");
   }
 });
 const sendMail = async (emailOptions) => {
@@ -111,11 +111,11 @@ const sendVerificationEmail = (user) => {
         <br />
         <p>
           Click on this
-          <a href="http://localhost:3000/Login#/VerifyEmail?email=${user.email}&code=${user.verificationCode}">link</a> or
+          <a href="http://localhost:3000/Login/VerifyEmail?email=${user.email}&code=${user.verificationCode}">link</a> or
           copy paste the following in your browser URL to verify your account.
         </p>
         <p>
-          <a href="http://localhost:3000/Login#/VerifyEmail?email=${user.email}&code=${user.verificationCode}">
+          <a href="http://localhost:3000/Login/VerifyEmail?email=${user.email}&code=${user.verificationCode}">
           http://localhost:3000/Login#/VerifyEmail?email=${user.email}&code=${user.verificationCode}
           </a>
         </p>
