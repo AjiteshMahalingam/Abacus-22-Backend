@@ -7,6 +7,10 @@ const Payment = require("../models/Payment");
 const axios = require("axios");
 const { randomUUID } = require("crypto");
 const router = new express.Router();
+const fs = require("fs");
+const logfile = fs.createWriteStream(__dirname + "payments.log", {
+  flags: "a",
+});
 
 const headers = {
   "X-Api-Key": process.env.PAYMENT_API_KEY,
