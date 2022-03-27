@@ -78,9 +78,10 @@ const UserSchema = new Schema(
       type: Date,
       default: null,
     },
-    cart: {
-      type: Array,
-      default: []
+    
+    eventPass: {
+      type: Boolean,
+      default: false
     }
   },
   {
