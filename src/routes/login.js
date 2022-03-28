@@ -40,7 +40,8 @@ router.post("/login", async (req, res) => {
       name : user.name,
       abacusId : user.abacusId,
       token : token,
-      eventPass: user.eventPass
+      eventPass: user.hasEventPass,
+      registrations: user.registrations
     }
     console.log(details);
     return res.status(200).send({ details : details });

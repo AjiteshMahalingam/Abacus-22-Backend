@@ -79,7 +79,7 @@ const UserSchema = new Schema(
       default: null,
     },
 
-    registration: {
+    registrations: {
       type: Array,
       default: []
     },
