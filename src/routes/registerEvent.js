@@ -39,26 +39,26 @@ router.put('/:id/add', auth, async(req,res) => {
     }
 });
 
-router.get('/:id/delete', auth, async(req,res) => {
-    try
-    {
-        const id = req.params.id;
-        const registration = await Registration.findOne({ eventId:id, email:req.user.email });
-        if(!registration){
-            res.status(200).send("Event is not registered");
-            return;
-        }
+// router.get('/:id/delete', auth, async(req,res) => {
+//     try
+//     {
+//         const id = req.params.id;
+//         const registration = await Registration.findOne({ eventId:id, email:req.user.email });
+//         if(!registration){
+//             res.status(200).send("Event is not registered");
+//             return;
+//         }
 
-        registration.remove();        
+//         registration.remove();        
 
-        res.status(200).send("Event deleted");
-        console.log("Event deleted for " + req.user.email)
-    }
-    catch(err){
-        console.log(err);
-        res.status(400).send("Unable to register to event")
-    }
-});
+//         res.status(200).send("Event deleted");
+//         console.log("Event deleted for " + req.user.email)
+//     }
+//     catch(err){
+//         console.log(err);
+//         res.status(400).send("Unable to register to event")
+//     }
+// });
 
 
 module.exports = router;
