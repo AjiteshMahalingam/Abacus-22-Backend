@@ -21,9 +21,20 @@ const RegistrationSchema = new Schema(
       type: Boolean,
       default: false,
     },
-    paymentId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "payment",
+
+    email: {
+      type: String,
+      required: true,
+      trim: true,
+      lowerCase: true,
+    },
+    // paymentId: {
+    //   type: String,
+    //   ref: "payment",
+    // },
+
+    type: {
+      type: String,
     },
   },
   {
