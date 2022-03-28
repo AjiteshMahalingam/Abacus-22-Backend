@@ -10,7 +10,8 @@ const signupRoutes = require("./routes/signup");
 const registerRoutes = require("./routes/registrations");
 const adminRoutes = require("./routes/admin");
 const cartRoutes = require("./routes/cart");
-const paymentRoutes = require("./routes/payment");
+// const paymentRoutes = require("./routes/payment");
+const webHook = require("./routes/payment").webHook;
 const cors = require("cors");
 // const session = require("express-session");
 
@@ -45,8 +46,9 @@ app.use("/user", loginRoutes);
 app.use("/user/signup", signupRoutes);
 app.use("/user/registrations", registerRoutes);
 app.use("/user/cart", cartRoutes);
-app.use("/payments", paymentRoutes);
+// app.use("/payments", paymentRoutes);
 
+app.post("/payments/webhook", webHook);
 app.post("/forgetPassword", require("./routes/forgetPassword"));
 app.put("/resetPassword/:resetToken", require("./routes/resetPassword"));
 

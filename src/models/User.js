@@ -72,16 +72,20 @@ const UserSchema = new Schema(
 
     resetPasswordToken: {
       type: String,
-      deafult: null,
+      default: null,
     },
 
     resetPasswordExpireTime: {
       type: Date,
       default: null,
     },
-    cart: {
+    registrations: {
       type: Array,
       default: [],
+    },
+    hasEventPass: {
+      type: Boolean,
+      default: false,
     },
   },
   {

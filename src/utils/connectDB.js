@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 mongoose
-  .connect(process.env.EC2_DB_URL, {
+  .connect(process.env.DB_URL, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })

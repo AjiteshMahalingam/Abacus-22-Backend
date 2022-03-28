@@ -1,31 +1,38 @@
 require("dotenv").config();
-const express = require("express");
-const auth = require("../middleware/auth");
+// const express = require("express");
+// const auth = require("../middleware/auth");
 const User = require("../models/User");
 const Payment = require("../models/Payment");
 // const request = require("request");
 const axios = require("axios");
 const { randomUUID } = require("crypto");
-const router = new express.Router();
+// const router = new express.Router();
 const fs = require("fs");
 const logfile = fs.createWriteStream(__dirname + "payments.log", {
   flags: "a",
 });
 
+const config = require("../data/config.json");
+
 const headers = {
   "X-Api-Key": process.env.PAYMENT_API_KEY,
   "X-Auth-Token": process.env.PAYMENT_AUTH_TOKEN,
 };
-router.post("/pay", async (req, res) => {
-  console.log(req.body);
-  const { email, buyer_name, phone, amount, purpose } = req.body;
+
+const paymentApiCall = async (eventId, user) => {
+  const email = user.email;
+  const name = user.name;
+  const phone = user.phoneNumber;
+  const amount = config[eventId].amount;
+  const purpose = config[eventId].purpose;
+  // const redirect_url = config[eventId].redirect_url;
 
   var payload = {
     purpose: purpose,
     amount: amount,
     phone: phone,
-    buyer_name: buyer_name,
-    redirect_url: "http://www.example.com/redirect/",
+    buyer_name: name,
+    redirect_url: process.env.PAYMENT_REDIRECT_URL,
     send_email: true,
     webhook: process.env.PAYMENT_WEBHOOK_URL,
     send_sms: true,
@@ -34,50 +41,96 @@ router.post("/pay", async (req, res) => {
   };
 
   console.log(payload);
-  const payment = new Payment({
-    email,
-    name: buyer_name,
-    phone,
-    amount,
-    purpose,
-    paymentId: randomUUID(),
-  });
 
-  await payment.save();
-
-  axios.post(
-    "https://test.instamojo.com/api/1.1/payment-requests/",
-    {
-      form: payload,
+  const output = await axios
+    .post("https://test.instamojo.com/api/1.1/payment-requests/", payload, {
       headers: headers,
-    },
-    (err, result, body) => {
-      console.log(err);
-      console.log(result);
-      if (!err && result.statusCode == 201) {
-        console.log(body);
-        return res.send(result.body);
-      }
-    }
-  );
+    })
+    .then((result) => {
+      return {
+        message: "Payment Initiated",
+        body: result.data,
+      };
+    })
+    .catch((e) => {
+      return {
+        message: "Payment failure",
+        body: e,
+      };
+    });
+  return output;
+};
 
-  return res.status(400).send({ message: "Payment failure" });
+// router.post("/pay", auth, async (req, res) => {
+//   console.log(req.body);
+//   const id = req.body.id;
+//   const email = req.user.email;
+//   const name = req.user.name;
+//   const phone = req.user.phone;
+//   const amount = config[id].amount;
+//   const purpose = config[id].purpose;
+//   const redirect_url = config[id].redirect_url;
+//   // const { email, buyer_name, phone, amount, purpose } = req.body;
 
-  // request.post(
-  //   "https://test.instamojo.com/api/1.1/payment-requests/",
-  //   { form: payload, headers: headers },
-  //   function (error, response, body) {
-  //     console.log(response);
-  //     console.log(body);
-  //     console.log(error);
-  //     if (!error && response.statusCode == 201) {
-  //       console.log(body);
-  //     }
-  //   }
-  // );
-});
+//   var payload = {
+//     purpose: purpose,
+//     amount: amount,
+//     phone: phone,
+//     buyer_name: name,
+//     redirect_url: redirect_url,
+//     send_email: true,
+//     webhook: process.env.PAYMENT_WEBHOOK_URL,
+//     send_sms: true,
+//     email: email,
+//     allow_repeated_payments: false,
+//   };
 
-router.post("/webhook", async (req, res) => {
+//   console.log(payload);
+//   const payment = new Payment({
+//     email,
+//     name: buyer_name,
+//     phone,
+//     amount,
+//     purpose,
+//     paymentId: randomUUID(),
+//   });
+
+//   await payment.save();
+
+//   axios.post(
+//     "https://test.instamojo.com/api/1.1/payment-requests/",
+//     {
+//       form: payload,
+//       headers: headers,
+//     },
+//     (err, result, body) => {
+//       console.log(err);
+//       console.log(result);
+//       if (!err && result.statusCode == 201) {
+//         console.log(body);
+//         return res.send(result.body);
+//       }
+//     }
+//   );
+
+//   return res.status(400).send({ message: "Payment failure" });
+
+//   // request.post(
+//   //   "https://test.instamojo.com/api/1.1/payment-requests/",
+//   //   { form: payload, headers: headers },
+//   //   function (error, response, body) {
+//   //     console.log(response);
+//   //     console.log(body);
+//   //     console.log(error);
+//   //     if (!error && response.statusCode == 201) {
+//   //       console.log(body);
+//   //     }
+//   //   }
+//   // );
+// });
+
+const webHook = async (req, res) => {
+  // router.post("/webhook", async (req, res) => {
   const date = new Date();
   const time = date.toLocaleString("en-US", {
     timeZone: "Asia/Kolkata",
@@ -139,6 +192,6 @@ router.post("/webhook", async (req, res) => {
       );
       return res.status(500).send({ message: "Server Error." });
     });
-});
+};
 
-module.exports = router;
+module.exports = { paymentApiCall, webHook };
