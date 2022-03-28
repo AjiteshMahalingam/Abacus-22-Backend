@@ -1,7 +1,7 @@
 const User = require("../models/User");
 const { v4: uuidv4 } = require("uuid");
 const { genToken } = require("../helper/genToken");
-const sendVerificationEmail = require("../middleware/sendVerificationEmail");
+const { sendVerificationEmail } = require("../middleware/mailer");
 const url = require("url");
 
 //both google signin and signup
@@ -13,7 +13,7 @@ const googleSignin = async (req, res, next) => {
       if (user.isAccountVerified) {
         const token = await genToken(user);
         console.log("token is ==", token);
-        const link = new URL(`http://localhost:3000/Login#/sign-in`);
+        const link = new URL(`http://localhost:3000/Login/sign-in`);
         link.searchParams.append(
           "message",
           "Login success, for token check console."

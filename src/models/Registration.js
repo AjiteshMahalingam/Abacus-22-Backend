@@ -8,10 +8,18 @@ const RegistrationSchema = new Schema(
       required: true,
       trim: true,
     },
-
-    abacusID: {
-      type: Number,
-      default: 2022000,
+    userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "user",
+      required: true,
+    },
+    type: {
+      type: String,
+      required: true,
+    },
+    isPaymentDone: {
+      type: Boolean,
+      default: false,
     },
 
     email: {
@@ -26,8 +34,8 @@ const RegistrationSchema = new Schema(
     // },
 
     type: {
-      type: String
-    }
+      type: String,
+    },
   },
   {
     timestamps: true,

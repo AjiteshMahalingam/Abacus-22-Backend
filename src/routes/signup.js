@@ -3,7 +3,7 @@ const User = require("../models/User");
 const bcrypt = require("bcryptjs");
 const auth = require("../middleware/auth");
 const router = new express.Router();
-const sendVerificationEmail = require("../middleware/sendVerificationEmail");
+const { sendVerificationEmail } = require("../middleware/mailer");
 
 router.post("/newUser", async (req, res) => {
   //console.log(req.body);
@@ -18,6 +18,7 @@ router.post("/newUser", async (req, res) => {
     year,
     department,
     password,
+    abacusId: Math.floor(Math.random() * 1000000),
   });
   try {
     user.password = await bcrypt.hash(user.password, 8);
@@ -56,8 +57,8 @@ router.post("/googleSignUp", async (req, res) => {
       user.college = college;
       user.year = year;
       user.department = department;
-
-      user.password = await bcrypt.hash(password, 8);
+      (user.abacusId = Math.floor(Math.random() * 1000000)),
+        (user.password = await bcrypt.hash(password, 8));
       user.isAccountVerified = true;
 
       await user.save();

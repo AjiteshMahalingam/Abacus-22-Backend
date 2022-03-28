@@ -9,7 +9,8 @@ const UserSchema = new Schema(
   {
     abacusId: {
       type: Number,
-      default: 2022000,
+      required: true,
+      // unique: true,
     },
     email: {
       type: String,
@@ -71,23 +72,21 @@ const UserSchema = new Schema(
 
     resetPasswordToken: {
       type: String,
-      deafult: null,
+      default: null,
     },
 
     resetPasswordExpireTime: {
       type: Date,
       default: null,
     },
-
     registrations: {
       type: Array,
-      default: []
+      default: [],
     },
-    
     hasEventPass: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   {
     timestamps: true,

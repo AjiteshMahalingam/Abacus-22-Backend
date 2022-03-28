@@ -15,15 +15,22 @@ const PaymentSchema = new Schema(
     },
     purpose: {
       type: String,
+      required: true,
     },
     amount: {
       type: Number,
+      required: true,
     },
     name: {
       type: String,
     },
     email: {
       type: String,
+      required: true,
+    },
+    phone: {
+      type: String,
+      required: true,
     },
   },
   {
