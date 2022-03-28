@@ -31,13 +31,14 @@ router.post("/eventpass", auth, async (req, res) => {
       result.message === "Payment Initiated" &&
       result.body.success === true
     ) {
+      const details = result.body.payment_request;
       const payment = new Payment({
-        req.user.email,
-        req.name,
-        phone,
-        amount,
-        purpose,
-        paymentId: result.body.payment_request.id,
+        email: details.email,
+        name: details.buyer_name,
+        phone: details.phone,
+        amount: details.amount,
+        purpose: details.purpose,
+        paymentId: details.id,
       });
 
       await payment.save();
@@ -59,6 +60,9 @@ router.post("/event/:eventId", auth, async (req, res) => {
         paymentStatus: true,
       });
       await eventReg.save();
+
+      req.user.registrations.push(req.params.eventId);
+      req.user.save();
       res.status(201).send({ message: "Event registration successfull" });
     } else {
       res.status(400).send({

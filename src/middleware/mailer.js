@@ -73,7 +73,7 @@ const sendMail = async (emailOptions) => {
   try {
     const options = {
       subject: emailOptions.subject,
-      text: emailOptions.text,
+      // text: emailOptions.text,
       html: emailOptions.html,
       to: emailOptions.to,
       from: `${process.env.NAME}  ${process.env.EMAIL}`,
