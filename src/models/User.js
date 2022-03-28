@@ -78,8 +78,13 @@ const UserSchema = new Schema(
       type: Date,
       default: null,
     },
+
+    registration: {
+      type: Array,
+      default: []
+    },
     
-    eventPass: {
+    hasEventPass: {
       type: Boolean,
       default: false
     }

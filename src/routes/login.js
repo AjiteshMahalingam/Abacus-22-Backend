@@ -36,8 +36,14 @@ router.post("/login", async (req, res) => {
     user.tokens.push({ token });
     await user.save();
 
-    console.log(user);
-    return res.status(200).send({ token: token });
+    const details = {
+      name : user.name,
+      abacusId : user.abacusId,
+      token : token,
+      eventPass: user.eventPass
+    }
+    console.log(details);
+    return res.status(200).send({ details : details });
   } catch (err) {
     console.log(err);
     return res.status(400).send({ message: err });
