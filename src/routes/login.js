@@ -37,14 +37,14 @@ router.post("/login", async (req, res) => {
     await user.save();
 
     const details = {
-      name : user.name,
-      abacusId : user.abacusId,
-      token : token,
+      name: user.name,
+      abacusId: user.abacusId,
+      token: token,
       eventPass: user.hasEventPass,
-      registrations: user.registrations
-    }
+      registrations: user.registrations,
+    };
     console.log(details);
-    return res.status(200).send({ details : details });
+    return res.status(200).send({ details: details });
   } catch (err) {
     console.log(err);
     return res.status(400).send({ message: err });
@@ -90,7 +90,7 @@ router.post("/logout", auth, async (req, res) => {
       return token.token !== req.token;
     });
     await req.user.save();
-    res.send("Successfully logged out");
+    res.status(200).send("Successfully logged out");
   } catch (e) {
     res.status(500).send();
   }
