@@ -3,7 +3,8 @@ const session = require("express-session");
 
 const path = require("path");
 const dotenv = require("dotenv");
-dotenv.config({ path: path.resolve(__dirname, "../.env") });
+//dotenv.config({ path: path.resolve(__dirname, "../.env") });
+dotenv.config();
 
 const loginRoutes = require("./routes/login");
 const signupRoutes = require("./routes/signup");
@@ -12,10 +13,10 @@ const adminRoutes = require("./routes/admin");
 const cartRoutes = require("./routes/cart");
 // const paymentRoutes = require("./routes/payment");
 const webHook = require("./routes/payment").webHook;
-const eventpassRoutes = require("./routes/eventpass");
+//const eventpassRoutes = require("./routes/eventpass");
 const paymentRoutes = require("./routes/payment");
 const registerRoutes = require("./routes/registerEvent");
-const getDetailsRoutes = require("./routes/getDetails");
+//const getDetailsRoutes = require("./routes/getDetails");
 const cors = require("cors");
 // const session = require("express-session");
 
@@ -51,10 +52,10 @@ app.use("/user/signup", signupRoutes);
 app.use("/user/registrations", registerRoutes);
 app.use("/user/cart", cartRoutes);
 // app.use("/payments", paymentRoutes);
-app.use("/user/geteventpass", eventpassRoutes);
+//app.use("/user/geteventpass", eventpassRoutes);
 // app.use("user/payment", paymentRoutes);
 app.use("/user/registration/", registerRoutes);
-app.use("/user/getDetails", getDetailsRoutes);
+//app.use("/user/getDetails", getDetailsRoutes);
 
 app.post("/payments/webhook", webHook);
 app.post("/forgetPassword", require("./routes/forgetPassword"));

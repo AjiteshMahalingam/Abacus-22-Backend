@@ -1,5 +1,5 @@
 const User = require("../models/User");
-const sendMail = require("../middleware/mailer");
+const sendMail = require("../middleware/mailer").sendMail;
 const crypto = require("crypto");
 const bcrypt = require("bcryptjs");
 
@@ -42,7 +42,7 @@ const resetPassword = async(req,res) => {
         await sendMail({
             subject : "Confirmation of password change",
             text : "Password for the account registered in this email has been modified.",
-            html : null,
+            html: '<p>Password for the account registered in this email has been modified.</p>',
             to : user.email
         });
         console.log("Response sent to user");

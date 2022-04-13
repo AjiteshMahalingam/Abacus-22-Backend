@@ -3,7 +3,7 @@ const User = require("../models/User");
 const bcrypt = require("bcryptjs");
 const auth = require("../middleware/auth");
 const router = new express.Router();
-const { sendVerificationEmail } = require("../middleware/mailer");
+const sendVerificationEmail = require("../middleware/mailer").sendVerificationEmail;
 
 router.post("/newUser", async (req, res) => {
   //console.log(req.body);
