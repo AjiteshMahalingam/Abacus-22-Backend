@@ -1,38 +1,46 @@
 const express = require("express");
 const auth = require("../middleware/auth");
-const Payment = require("../models/Payment");
 const User = require("../models/User");
 const Registration = require("../models/Registration");
 
 const router = new express.Router();
 
-router.put("/:id/add", auth, async (req, res) => {
+router.put("/:id/:name", auth, async (req, res) => {
   try {
+
     const id = req.params.id;
+    const name = req.params.name;
     const registration = await Registration.findOne({
       eventId: id,
       email: req.user.email,
     });
+
     if (registration) {
+      console.log("Registered already")
       res.status(200).send({ message: "Already Registered for event" });
       return;
     }
 
-    const user = await User.findOne({ email: req.user.email });
-    if (user.hasEventPass == false) {
-      res.status(400).send({ message: "Event pass not retrieved" });
+    if (req.user.hasEventPass == false) {
+      console.log("Not paid")
+      res.status(400).send({ message: "Payment not done for events" });
       return;
     }
 
     const register = new Registration({
       eventId: id,
-      abacusId: user.abacusId,
-      email: user.email,
       type: "event",
+      userId: req.user.abacusId,
+      email: req.user.email,
+      name: name
     });
     await register.save();
 
-    res.status(200).send({ message: "Event added for " + req.user.email });
+    req.user.registrations.push(id);
+    await req.user.save();
+
+    console.log("registration Successful")
+    res.status(200).send({ message: "Registration Successful" });
     return;
   } catch (err) {
     console.log(err);

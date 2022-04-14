@@ -49,7 +49,7 @@ app.get("/", (req, res) => {
 app.use("/admin", adminRoutes);
 app.use("/user", loginRoutes);
 app.use("/user/signup", signupRoutes);
-app.use("/user/registrations", registerRoutes);
+//app.use("/user/registrations", registerRoutes);
 app.use("/user/cart", cartRoutes);
 // app.use("/payments", paymentRoutes);
 //app.use("/user/geteventpass", eventpassRoutes);
