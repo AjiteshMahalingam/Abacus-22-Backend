@@ -3,6 +3,7 @@ const { v4: uuidv4 } = require("uuid");
 const { genToken } = require("../helper/genToken");
 const { sendVerificationEmail } = require("../middleware/mailer");
 const url = require("url");
+require("dotenv").config();
 
 //both google signin and signup
 const googleSignin = async (req, res, next) => {
@@ -13,7 +14,7 @@ const googleSignin = async (req, res, next) => {
       if (user.isAccountVerified) {
         const token = await genToken(user);
         console.log("token is ==", token);
-        const link = new URL(`http://localhost:3000/Login/sign-in`);
+        const link = new URL(process.env["BASE_FRONTEND_URL"] + "/login");
         link.searchParams.append(
           "message",
           "Login success, for token check console."
@@ -27,7 +28,7 @@ const googleSignin = async (req, res, next) => {
       } else {
         // incase the user has registered but not verified
         sendVerificationEmail(user);
-        const link = new URL(`http://localhost:3000/Login#/sign-in`);
+        const link = new URL(process.env["BASE_FRONTEND_URL"] + "/login");
         link.searchParams.append(
           "message",
           "User  not verified yet, verification mail sent again. Please verify to continue."
@@ -38,6 +39,7 @@ const googleSignin = async (req, res, next) => {
       // sign up new user
       User.create({
         // id: uuidv4(),
+        abacusId: Math.floor(Math.random() * 1000000),
         email,
         name: req.user.displayName,
       })
@@ -47,7 +49,8 @@ const googleSignin = async (req, res, next) => {
             // const token = await genToken(user);
             user.save();
             return res.redirect(
-              "http://localhost:3000/Login/" +
+              process.env["BASE_FRONTEND_URL"] +
+                "/login" +
                 url.format({
                   query: {
                     message:
