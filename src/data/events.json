@@ -1,14 +1,14 @@
 [
   {
-    "id": "OSPC",
-    "password": "asdfg1234"
+    "id": "1",
+    "password": "abcd"
   },
   {
-    "id": "HW",
-    "password": "qwtop0987"
+    "id": "2",
+    "password": "defg"
   },
   {
-    "id": "CFQ",
-    "password": "mnbvc4567"
+    "id": "3",
+    "password": "hijk"
   }
 ]
