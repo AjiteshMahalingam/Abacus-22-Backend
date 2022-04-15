@@ -42,9 +42,10 @@ router.post("/login", async (req, res) => {
       token: token,
       eventPass: user.hasEventPass,
       registrations: user.registrations,
+      college: user.college,
+      isCegian: user.isCegian,
     };
-    console.log(details);
-    return res.status(200).send({ details: details });
+    return res.status(200).send({ ...details });
   } catch (err) {
     console.log(err);
     return res.status(400).send({ message: err });

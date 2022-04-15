@@ -12,6 +12,7 @@ const PaymentSchema = new Schema(
     },
     status: {
       type: String,
+      required: true,
     },
     purpose: {
       type: String,

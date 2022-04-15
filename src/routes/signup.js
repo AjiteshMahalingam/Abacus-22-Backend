@@ -3,7 +3,8 @@ const User = require("../models/User");
 const bcrypt = require("bcryptjs");
 const auth = require("../middleware/auth");
 const router = new express.Router();
-const sendVerificationEmail = require("../middleware/mailer").sendVerificationEmail;
+const sendVerificationEmail =
+  require("../middleware/mailer").sendVerificationEmail;
 
 router.post("/newUser", async (req, res) => {
   //console.log(req.body);
@@ -21,6 +22,11 @@ router.post("/newUser", async (req, res) => {
     abacusId: Math.floor(Math.random() * 1000000),
   });
   try {
+    if (college === "Anna university CEG campus Guindy") {
+      user.isCegian = true;
+    } else {
+      user.isCegian = false;
+    }
     user.password = await bcrypt.hash(user.password, 8);
     await user.generateVerificationCode();
     await user.save();
@@ -86,6 +92,11 @@ router.post("/updateExisting", auth, async (req, res) => {
     user.year = year;
     user.department = department;
 
+    if (college === "Anna university CEG campus Guindy") {
+      user.isCegian = true;
+    } else {
+      user.isCegian = false;
+    }
     await user.save();
     console.log("user: " + user.email + " updated");
     return res.status(200).send({ message: "User has been updated" });

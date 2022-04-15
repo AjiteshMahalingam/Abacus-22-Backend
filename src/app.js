@@ -49,12 +49,12 @@ app.get("/", (req, res) => {
 app.use("/admin", adminRoutes);
 app.use("/user", loginRoutes);
 app.use("/user/signup", signupRoutes);
-app.use("/user/registrations", registerRoutes);
+// app.use("/user/registrations", registerRoutes);
 app.use("/user/cart", cartRoutes);
 // app.use("/payments", paymentRoutes);
 //app.use("/user/geteventpass", eventpassRoutes);
 // app.use("user/payment", paymentRoutes);
-app.use("/user/registration/", registerRoutes);
+app.use("/user/registration", registerRoutes);
 //app.use("/user/getDetails", getDetailsRoutes);
 
 app.post("/payments/webhook", webHook);

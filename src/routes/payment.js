@@ -155,10 +155,15 @@ const webHook = async (req, res) => {
             paymentrequestid: paymentobject.payment_request_id,
           })
           .then(() => {
+            if (paymentobject.purpose === "EventPass") {
+              const user = User.findOne({ email: paymentobject.buyer });
+              user.hasEventPass = true;
+              user.save();
+            }
             logfile.write(
               "\n[ " + time + " ] SUCCESS : " + JSON.stringify(paymentobject)
             );
-            return res.status(200).send({});
+            return res.status(200).send({ message: "Payment Received" });
           })
           .catch((err) => {
             logfile.write(
