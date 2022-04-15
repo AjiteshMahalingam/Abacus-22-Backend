@@ -138,7 +138,6 @@ const webHook = async (req, res) => {
 
   const paymentobject = JSON.parse(JSON.stringify(req.body));
 
-  console.log(paymentobject);
   Payment.findOne({
     where: {
       email: paymentobject.buyer,
@@ -156,7 +155,7 @@ const webHook = async (req, res) => {
           })
           .then(() => {
             if (paymentobject.purpose === "EventPass") {
-              const user = User.findOne({ email: paymentobject.buyer });
+              const user = await User.findOne({ email: paymentobject.buyer });
               user.hasEventPass = true;
               user.save();
             }
