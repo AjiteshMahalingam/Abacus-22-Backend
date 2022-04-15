@@ -13,7 +13,6 @@ const googleSignin = async (req, res, next) => {
     if (user) {
       if (user.isAccountVerified) {
         const token = await genToken(user);
-        console.log("token is ==", token);
         const link = new URL(process.env["BASE_FRONTEND_URL"] + "/login");
         link.searchParams.append(
           "message",
@@ -50,7 +49,7 @@ const googleSignin = async (req, res, next) => {
             user.save();
             return res.redirect(
               process.env["BASE_FRONTEND_URL"] +
-                "/login" +
+                "/signup" +
                 url.format({
                   query: {
                     message:

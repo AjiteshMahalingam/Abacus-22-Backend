@@ -57,9 +57,7 @@ router.get(
   "/login/google",
   passport.authenticate("google", {
     scope: ["profile", "email"],
-    successRedirect:
-      "https://abacus-22-backend.herokuapp.com/user/login/google/redirect",
-    //"http://localhost:8000/user/login/google/redirect"
+    successRedirect: "https://abacus.org.in/api/user/login/google/redirect",
   })
 );
 
