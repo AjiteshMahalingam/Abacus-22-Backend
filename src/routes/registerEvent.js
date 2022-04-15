@@ -1,6 +1,5 @@
 const express = require("express");
 const auth = require("../middleware/auth");
-const Payment = require("../models/Payment");
 const User = require("../models/User");
 const Registration = require("../models/Registration");
 const paymentApiCall = require("../routes/payment").paymentApiCall;
@@ -19,11 +18,14 @@ router.get("/", auth, async (req, res) => {
 router.put("/event/:id", auth, async (req, res) => {
   try {
     const id = req.params.id;
+    const name = req.params.name;
     const registration = await Registration.findOne({
       eventId: id,
       email: req.user.email,
     });
+
     if (registration) {
+      console.log("Registered already");
       res.status(200).send({ message: "Already Registered for event" });
       return;
     }
@@ -35,24 +37,23 @@ router.put("/event/:id", auth, async (req, res) => {
     try {
       const register = new Registration({
         eventId: id,
-        abacusId: req.user.abacusId,
-        email: req.user.email,
         type: "event",
+        userId: req.user.abacusId,
+        email: req.user.email,
+        name: name,
       });
-
       await register.save();
 
       req.user.registrations.push(id);
-      req.user.save();
+      await req.user.save();
 
-      return res.status(200).send({ message: "Event Successfully Registered" });
+      console.log("registration Successful");
+      res.status(200).send({ message: "Registration Successful" });
+      return;
     } catch (err) {
       console.log(err);
       return res.status(400).send({ message: "Unable to register to event" });
     }
-    return res
-      .status(200)
-      .send({ message: "Event added for " + req.user.email });
   } catch (err) {
     console.log(err);
     return res.status(400).send({ message: "Unable to register to event" });
