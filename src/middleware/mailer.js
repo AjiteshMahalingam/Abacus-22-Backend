@@ -9,6 +9,7 @@ const { google } = require("googleapis");
 const OAuth2 = google.auth.OAuth2;
 
 // // console.log(process.env.CLIENT_ID);
+/*
  const CLIENT_ID = process.env.CLIENT_ID;
  const CLIENT_SECRET = process.env.CLIENT_SECRET;
  const REDIRECT_URI = "https://developers.google.com/oauthplayground";
@@ -54,7 +55,7 @@ const OAuth2 = google.auth.OAuth2;
      console.log(error);
    }
  };
-
+*/
 // const mailTransporter = nodemailer.createTransport({
 //   host: "smtp.gmail.com",
 //   service: "gmail",
@@ -73,6 +74,20 @@ const OAuth2 = google.auth.OAuth2;
 //     console.log("Mailer works fine");
 //   }
 // });
+const transporter = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+    user: process.env["NODEMAILER_EMAIL_ID"],
+    pass: process.env["NODEMAILER_PWD"],
+  },
+});
+transporter.verify((error, success) => {
+  if (error) {
+    console.log(error);
+  } else {
+    console.log("Email Transporter Works");
+  }
+});
 const sendMail = async (emailOptions) => {
   try {
     const options = {
@@ -83,8 +98,9 @@ const sendMail = async (emailOptions) => {
       from: `${process.env.NAME}  ${process.env.EMAIL}`,
     };
 
-    const emailTransporter = await createTransporter();
-    const result = await emailTransporter.sendMail(options);
+    // const emailTransporter = await createTransporter();
+    // const result = await emailTransporter.sendMail(options);
+    const result = transporter.sendMail(options);
     console.log("Email sent : " + result.messageId);
 
     return;
@@ -129,8 +145,8 @@ const sendVerificationEmail = async (user) => {
 
   // mailer(mailOptions);
 
-  const emailTransporter = await createTransporter();
-  emailTransporter.sendMail(mailOptions, (err, data) => {
+  // const emailTransporter = await createTransporter();
+  transporter.sendMail(mailOptions, (err, data) => {
     if (err) {
       console.log({
         status: "Failed",
