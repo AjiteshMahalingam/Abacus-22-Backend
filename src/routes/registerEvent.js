@@ -3,13 +3,20 @@ const auth = require("../middleware/auth");
 const User = require("../models/User");
 const Registration = require("../models/Registration");
 const paymentApiCall = require("../routes/payment").paymentApiCall;
+const Payment = require("../models/Payment");
 
 const router = new express.Router();
 
 router.get("/", auth, async (req, res) => {
   try {
-    const eventsReg = await Registration.find({ userId: req.user._id });
-    return res.status(200).send(eventsReg);
+    // const eventsReg = await Registration.find({ userId: req.user._id });
+    // console.log(eventsReg);
+    return res
+      .status(200)
+      .send({
+        registrations: req.user.registrations,
+        hasEventPass: req.user.hasEventPass,
+      });
   } catch (err) {
     return res.status(500).send({ error: err.message });
   }
@@ -82,6 +89,7 @@ router.put("/eventpass", auth, async (req, res) => {
         amount: details.amount,
         purpose: details.purpose,
         paymentId: details.id,
+        status: "Not Paid",
       });
 
       await payment.save();

@@ -43,7 +43,7 @@ const paymentApiCall = async (eventId, user) => {
   console.log(payload);
 
   const output = await axios
-    .post("https://test.instamojo.com/api/1.1/payment-requests/", payload, {
+    .post(process.env["PAYMENT_API_URL"] + "/payment-requests/", payload, {
       headers: headers,
     })
     .then((result) => {
@@ -151,8 +151,8 @@ const webHook = async (req, res) => {
           .update({
             status: paymentobject.status,
             amount: paymentobject.amount,
-            paymentid: paymentobject.payment_id,
-            paymentrequestid: paymentobject.payment_request_id,
+            paymentId: paymentobject.payment_id,
+            paymentRequestId: paymentobject.payment_request_id,
           })
           .then(() => {
             if (paymentobject.purpose === "EventPass") {
@@ -199,4 +199,21 @@ const webHook = async (req, res) => {
     });
 };
 
-module.exports = { paymentApiCall, webHook };
+const paymentConfirmation = async (req, res) => {
+  const out = await axios
+    .get(
+      process.env["PAYMENT_API_URL"] + "/payments/" + req.body.paymentId + "/",
+      {
+        headers: headers,
+      }
+    )
+    .then((response) => {
+      return response.data;
+    })
+    .catch((err) => {
+      return err;
+    });
+  return res.send(out);
+};
+
+module.exports = { paymentApiCall, webHook, paymentConfirmation };

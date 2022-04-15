@@ -18,6 +18,7 @@ const registerRoutes = require("./routes/registerEvent");
 const hackathonRoutes = require("./routes/registerHackathon");
 //const getDetailsRoutes = require("./routes/getDetails");
 const cors = require("cors");
+const auth = require("./middleware/auth");
 // const session = require("express-session");
 
 // Establishing DB Connection
@@ -57,6 +58,7 @@ app.use("/user/hackathon-register/", hackathonRoutes);
 //app.use("/user/getDetails", getDetailsRoutes);
 
 app.post("/payments/webhook", webHook);
+app.post("/payments/confirmation", auth, paymentRoutes.paymentConfirmation);
 app.post("/forgetPassword", require("./routes/forgetPassword"));
 app.put("/resetPassword/:resetToken", require("./routes/resetPassword"));
 
