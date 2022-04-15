@@ -153,7 +153,7 @@ const webHook = async (req, res) => {
             paymentId: paymentobject.payment_id,
             paymentRequestId: paymentobject.payment_request_id,
           })
-          .then(() => {
+          .then(async () => {
             if (paymentobject.purpose === "EventPass") {
               const user = await User.findOne({ email: paymentobject.buyer });
               user.hasEventPass = true;
