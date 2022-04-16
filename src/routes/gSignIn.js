@@ -28,13 +28,30 @@ const googleSignin = async (req, res, next) => {
         return res.redirect(link);
       } else {
         // incase the user has registered but not verified
-        sendVerificationEmail(user);
-        const link = new URL(process.env["BASE_FRONTEND_URL"] + "/login");
-        link.searchParams.append(
-          "message",
-          "User  not verified yet, verification mail sent again. Please verify to continue."
+
+        return res.redirect(
+          process.env["BASE_FRONTEND_URL"] +
+            "/signup" +
+            url.format({
+              query: {
+                message:
+                  "User profile created successfully, continue filling your information to login.",
+                email: user.email,
+                name: user.name,
+                type: "signup",
+                googleAuth: true,
+                // token,
+              },
+            })
         );
-        return res.redirect(link);
+
+        // sendVerificationEmail(user);
+        // const link = new URL(process.env["BASE_FRONTEND_URL"] + "/login");
+        // link.searchParams.append(
+        //   "message",
+        //   "User  not verified yet, verification mail sent again. Please verify to continue."
+        // );
+        // return res.redirect(link);
       }
     } else {
       // sign up new user

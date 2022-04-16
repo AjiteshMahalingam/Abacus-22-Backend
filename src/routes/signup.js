@@ -37,7 +37,7 @@ router.post("/newUser", async (req, res) => {
         "Verification mail has been sent to your email. Check the mail before logging in",
     });
   } catch (err) {
-    console.log(err.code);
+    // console.log(err);
     res.status(406).send(err);
   }
 });
