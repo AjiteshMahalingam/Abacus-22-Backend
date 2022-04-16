@@ -24,6 +24,7 @@ router.post("/newUser", async (req, res) => {
   try {
     if (college === "Anna university CEG campus Guindy") {
       user.isCegian = true;
+      user.hasEventPass = true;
     } else {
       user.isCegian = false;
     }
@@ -36,7 +37,7 @@ router.post("/newUser", async (req, res) => {
         "Verification mail has been sent to your email. Check the mail before logging in",
     });
   } catch (err) {
-    console.log(err.code);
+    // console.log(err);
     res.status(406).send(err);
   }
 });
@@ -66,6 +67,12 @@ router.post("/googleSignUp", async (req, res) => {
       (user.abacusId = Math.floor(Math.random() * 1000000)),
         (user.password = await bcrypt.hash(password, 8));
       user.isAccountVerified = true;
+      if (college === "Anna university CEG campus Guindy") {
+        user.isCegian = true;
+        user.hasEventPass = true;
+      } else {
+        user.isCegian = false;
+      }
 
       await user.save();
       console.log("Google Sign Up for : " + user.email);

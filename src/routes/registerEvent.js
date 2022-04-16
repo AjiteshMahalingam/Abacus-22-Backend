@@ -11,12 +11,10 @@ router.get("/", auth, async (req, res) => {
   try {
     // const eventsReg = await Registration.find({ userId: req.user._id });
     // console.log(eventsReg);
-    return res
-      .status(200)
-      .send({
-        registrations: req.user.registrations,
-        hasEventPass: req.user.hasEventPass,
-      });
+    return res.status(200).send({
+      registrations: req.user.registrations,
+      hasEventPass: req.user.hasEventPass,
+    });
   } catch (err) {
     return res.status(500).send({ error: err.message });
   }
