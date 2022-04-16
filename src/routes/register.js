@@ -104,6 +104,61 @@ router.put("/eventpass", auth, async (req, res) => {
   }
 });
 
+router.post("workshop/:id/:name", async(req, res) => {
+  
+  try{
+
+    const id = req.params.id;
+    const name = req.params.name;
+    const registration = await Registration.findOne({
+      eventId: id,
+      email: req.user.email,
+    });
+
+    if (registration) 
+      return res.status(200).send({ message: "Already Registered for event" });
+
+      const result = await paymentApiCall(1, name, req.user);
+      //console.log(result);
+      if (
+        result.message === "Payment Initiated" &&
+        result.body.success === true
+      ) {
+        const details = result.body.payment_request;
+        const payment = new Payment({
+          email: details.email,
+          name: details.buyer_name,
+          phone: details.phone,
+          amount: details.amount,
+          purpose: details.purpose,
+          paymentId: details.id,
+          status: "Not Paid",
+        });
+  
+        await payment.save();
+
+        const register = new Registration({
+          eventId: id,
+          type: "workshop",
+          userId: req.user.abacusId,
+          email: req.user.email,
+          name: name,
+        });
+        await register.save();
+  
+        req.user.registrations.push(id);
+        await req.user.save();
+        
+        return res.status(200).send({ message:"Registration Succesful",...result });
+        // res.redirect(result.body.payment_request.long_url);
+      }
+  }
+  catch(err){
+
+  }
+
+})
+
 router.post("/hackathon", auth, async (req, res) => {
   try {
 

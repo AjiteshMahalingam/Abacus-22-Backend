@@ -19,7 +19,7 @@ const headers = {
   "X-Auth-Token": process.env.PAYMENT_AUTH_TOKEN,
 };
 
-const paymentApiCall = async (eventId, user) => {
+const paymentApiCall = async (eventId, eventName, user) => {
   const email = user.email;
   const name = user.name;
   const phone = user.phoneNumber;
@@ -28,7 +28,7 @@ const paymentApiCall = async (eventId, user) => {
   // const redirect_url = config[eventId].redirect_url;
 
   var payload = {
-    purpose: purpose,
+    purpose: purpose+" - "+eventName, //to differentiate workshop payments
     amount: amount,
     phone: phone,
     buyer_name: name,
@@ -154,11 +154,11 @@ const webHook = async (req, res) => {
             paymentRequestId: paymentobject.payment_request_id,
           })
           .then(async () => {
-            if (paymentobject.purpose === "EventPass") {
-              const user = await User.findOne({ email: paymentobject.buyer });
-              user.hasEventPass = true;
-              user.save();
-            }
+            // if (paymentobject.purpose === `${config[eventId].purpose} - ${eventName}`) {
+            //   const user = await User.findOne({ email: paymentobject.buyer });
+            //   user.hasEventPass = true;
+            //   user.save();
+            // }
             logfile.write(
               "\n[ " + time + " ] SUCCESS : " + JSON.stringify(paymentobject)
             );
