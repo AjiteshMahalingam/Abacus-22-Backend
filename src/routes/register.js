@@ -67,6 +67,11 @@ router.put("/event/:id/:name", auth, async (req, res) => {
 });
 
 router.put("/eventpass", auth, async (req, res) => {
+    req.user.hasEventPass = true;
+    req.user.save();
+    return res.status(200).send({
+      message: "Event Pass Obtained",
+    });
   if (req.user.isCegian === true) {
     req.user.hasEventPass = true;
     req.user.save();
