@@ -31,7 +31,7 @@ router.put("/event/:id/:name", auth, async (req, res) => {
     });
 
     if (registration) {
-      console.log("Registered already");
+      //console.log("Registered already");
       res.status(200).send({ message: "Already Registered for event" });
       return;
     }

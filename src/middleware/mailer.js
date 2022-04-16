@@ -2,7 +2,7 @@ const path = require("path");
 // require("dotenv").config();
 
 const dotenv = require("dotenv");
-dotenv.config({ path: path.resolve(__dirname, "../../.env") });
+dotenv.config();
 
 const nodemailer = require("nodemailer");
 const { google } = require("googleapis");
@@ -75,11 +75,16 @@ const OAuth2 = google.auth.OAuth2;
 //   }
 // });
 const transporter = nodemailer.createTransport({
+  //host: "smtp.gmail.com",
   service: "gmail",
+  secure: false,
   auth: {
     user: process.env["NODEMAILER_EMAIL_ID"],
     pass: process.env["NODEMAILER_PWD"],
   },
+  tls: {
+         rejectUnauthorized: false,
+     }
 });
 transporter.verify((error, success) => {
   if (error) {
@@ -88,20 +93,21 @@ transporter.verify((error, success) => {
     console.log("Email Transporter Works");
   }
 });
+
 const sendMail = async (emailOptions) => {
   try {
     const options = {
       subject: emailOptions.subject,
-      // text: emailOptions.text,
+      //text: emailOptions.text,
       html: emailOptions.html,
       to: emailOptions.to,
-      from: `${process.env.NAME}  ${process.env.EMAIL}`,
+      from: `${process.env["NAME"]} ${process.env["NODEMAILER_EMAIL_ID"]}`
     };
 
-    // const emailTransporter = await createTransporter();
-    // const result = await emailTransporter.sendMail(options);
+    //  const emailTransporter = await createTransporter();
+    //  const result = await emailTransporter.sendMail(options);
     const result = transporter.sendMail(options);
-    console.log("Email sent : " + result.messageId);
+    console.log("Email sent : " + result.response);
 
     return;
   } catch (error) {

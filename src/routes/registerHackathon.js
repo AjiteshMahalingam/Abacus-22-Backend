@@ -1,7 +1,7 @@
 const User = require("../models/User");
 const Registration = require("../models/Registration");
 
-export const validate = async(user_one,user_two) => {
+const validate = async(user_one,user_two) => {
     const User1 = await verify(user_one);
         if(User1.verify==false)
             return {valid:false, message:User1.message};
@@ -10,9 +10,9 @@ export const validate = async(user_one,user_two) => {
             return {valid:false, message:User2.message};
 
     return {valid:true, user1:User1.user, user2:User2.user};
-}
+};
 
-export const hackRegister = async(user_one,user_two) => {
+const hackRegister = async(user_one,user_two) => {
 
     var status = 200;
     const User1_registration = await register(user_one);
@@ -30,7 +30,7 @@ export const hackRegister = async(user_one,user_two) => {
         status = 400;
         return { status:status, message:User1_registration.message};
     }
-}
+};
 
 const verify = async(email) => {
     const user = await User.findOne({ email });

@@ -1,5 +1,6 @@
 const User = require("../models/User");
 const crypto = require("crypto");
+
 const sendMail = require("../middleware/mailer").sendMail;
 
 const forgetPassword = async (req, res) => {
@@ -20,9 +21,9 @@ const forgetPassword = async (req, res) => {
     if (time_left > 8) {
       res.status(400).send({
         message:
-          "Email sent already. Try again after " +
-          (time_left - 8) +
-          " minutes.",
+          `Email sent already. Try again after
+          ${time_left-8}
+           minutes.`,
       });
       return;
     }
@@ -36,7 +37,7 @@ const forgetPassword = async (req, res) => {
     await user.save();
 
     const url = `${req.protocol}://localhost:3000/resetPassword/${token}`; //had to change the url acc. to ther front end port
-
+    //console.log(url)
     await sendMail({
       subject: "Request for password Reset",
       html: `<p>Use this link to reset your password <a href="${url}">Reset Password</a></p>
