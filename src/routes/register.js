@@ -1,9 +1,10 @@
 const express = require("express");
 const auth = require("../middleware/auth");
-const User = require("../models/User");
+
 const Registration = require("../models/Registration");
-const paymentApiCall = require("../routes/payment").paymentApiCall;
+const paymentApiCall = require("./payment").paymentApiCall;
 const Payment = require("../models/Payment");
+const {validate, hackRegister} = require("./registerHackathon.js")
 
 const router = new express.Router();
 
@@ -98,25 +99,40 @@ router.put("/eventpass", auth, async (req, res) => {
   }
 });
 
-// router.get('/:id/delete', auth, async(req,res) => {
-//     try
-//     {
-//         const id = req.params.id;
-//         const registration = await Registration.findOne({ eventId:id, email:req.user.email });
-//         if(!registration){
-//             res.status(200).send("Event is not registered");
-//             return;
-//         }
+router.post("/hackathon", auth, async (req, res) => {
+  try {
 
-//         registration.remove();
+    const user_one = req.body.email_one;
+    const user_two = req.body.email_two;
 
-//         res.status(200).send("Event deleted");
-//         console.log("Event deleted for " + req.user.email)
-//     }
-//     catch(err){
-//         console.log(err);
-//         res.status(400).send("Unable to register to event")
-//     }
-// });
+    if(!user_one || !user_two)
+        return res.status(400).send({ message : "Two participants are needed to register for the hackathon" })
+
+    if(user_one == user_two)
+        return res.status(400).send({ message : "Please enter two different emails ids" })
+
+    const registration = await Registration.findOne({
+        type: "hackathon",
+        email: { $in : [user_one,user_two]},
+    });
+
+    if (registration) {
+      console.log("Registered already")
+      res.status(200).send({ message: "User " + registration.email + " has been registered already" });
+      return;
+    }
+
+    const user_details = await validate(user_one,user_two);
+    if(user_details.valid == false)
+        return res.status(400).send({ message : user_details.message })
+    
+    const registration_details = await hackRegister(user_details.user1,user_details.user2);
+    return res.status(registration_details.status).send({ message:registration_details.message });   
+
+  } catch (err) {
+    console.log(err);
+    return res.status(400).send({ message: "Unable to register to hackathon" });
+  }
+});
 
 module.exports = router;

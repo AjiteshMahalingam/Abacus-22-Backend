@@ -1,47 +1,7 @@
-const express = require("express");
-const auth = require("../middleware/auth");
 const User = require("../models/User");
 const Registration = require("../models/Registration");
 
-const router = new express.Router();
-
-router.post("/", auth, async (req, res) => {
-  try {
-
-    const user_one = req.body.email_one;
-    const user_two = req.body.email_two;
-
-    if(!user_one || !user_two)
-        return res.status(400).send({ message : "Two participants are needed to register for the hackathon" })
-
-    if(user_one == user_two)
-        return res.status(400).send({ message : "Please enter two different emails ids" })
-
-    const registration = await Registration.findOne({
-        type: "hackathon",
-        email: { $in : [user_one,user_two]},
-    });
-
-    if (registration) {
-      console.log("Registered already")
-      res.status(200).send({ message: "User " + registration.email + " has been registered already" });
-      return;
-    }
-
-    const user_details = await validate(user_one,user_two);
-    if(user_details.valid == false)
-        return res.status(400).send({ message : user_details.message })
-    
-    const registration_details = await hackRegister(user_details.user1,user_details.user2);
-    return res.status(registration_details.status).send({ message:registration_details.message });   
-
-  } catch (err) {
-    console.log(err);
-    return res.status(400).send({ message: "Unable to register to hackathon" });
-  }
-});
-
-const validate = async(user_one,user_two) => {
+export const validate = async(user_one,user_two) => {
     const User1 = await verify(user_one);
         if(User1.verify==false)
             return {valid:false, message:User1.message};
@@ -52,7 +12,7 @@ const validate = async(user_one,user_two) => {
     return {valid:true, user1:User1.user, user2:User2.user};
 }
 
-const hackRegister = async(user_one,user_two) => {
+export const hackRegister = async(user_one,user_two) => {
 
     var status = 200;
     const User1_registration = await register(user_one);
@@ -106,4 +66,4 @@ const register = async(user, res) => {
     }
 }
 
-module.exports = router;
+

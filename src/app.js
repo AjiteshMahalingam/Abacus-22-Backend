@@ -8,14 +8,13 @@ dotenv.config();
 
 const loginRoutes = require("./routes/login");
 const signupRoutes = require("./routes/signup");
-
 const adminRoutes = require("./routes/admin");
-const cartRoutes = require("./routes/cart");
+
 // const paymentRoutes = require("./routes/payment");
 const webHook = require("./routes/payment").webHook;
 const paymentRoutes = require("./routes/payment");
-const eventRoutes = require("./routes/registerEvent");
-const hackathonRoutes = require("./routes/registerHackathon");
+const registerRoutes = require("./routes/register");
+
 //const getDetailsRoutes = require("./routes/getDetails");
 const cors = require("cors");
 const auth = require("./middleware/auth");
@@ -53,8 +52,7 @@ app.use("/user/signup", signupRoutes);
 // app.use("/payments", paymentRoutes);
 //app.use("/user/geteventpass", eventpassRoutes);
 // app.use("user/payment", paymentRoutes);
-app.use("/user/registration", eventRoutes);
-app.use("/user/hackathon-register/", hackathonRoutes);
+app.use("/user/registration", registerRoutes);
 //app.use("/user/getDetails", getDetailsRoutes);
 
 app.post("/payments/webhook", webHook);
