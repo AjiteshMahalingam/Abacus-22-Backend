@@ -14,7 +14,7 @@ const cartRoutes = require("./routes/cart");
 // const paymentRoutes = require("./routes/payment");
 const webHook = require("./routes/payment").webHook;
 const paymentRoutes = require("./routes/payment");
-const registerRoutes = require("./routes/registerEvent");
+const eventRoutes = require("./routes/registerEvent");
 const hackathonRoutes = require("./routes/registerHackathon");
 //const getDetailsRoutes = require("./routes/getDetails");
 const cors = require("cors");
@@ -53,7 +53,7 @@ app.use("/user/signup", signupRoutes);
 // app.use("/payments", paymentRoutes);
 //app.use("/user/geteventpass", eventpassRoutes);
 // app.use("user/payment", paymentRoutes);
-app.use("/user/registration/", registerRoutes);
+app.use("/user/registration", eventRoutes);
 app.use("/user/hackathon-register/", hackathonRoutes);
 //app.use("/user/getDetails", getDetailsRoutes);
 

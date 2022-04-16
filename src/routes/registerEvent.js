@@ -22,7 +22,7 @@ router.get("/", auth, async (req, res) => {
   }
 });
 
-router.put("/event/:id", auth, async (req, res) => {
+router.put("/event/:id/:name", auth, async (req, res) => {
   try {
     const id = req.params.id;
     const name = req.params.name;
