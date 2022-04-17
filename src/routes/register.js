@@ -104,10 +104,10 @@ router.put("/eventpass", auth, async (req, res) => {
   }
 });
 
-router.post("workshop/:id/:name", async(req, res) => {
+router.put("/workshop/:id/:name", auth, async(req, res) => {
   
   try{
-
+    
     const id = req.params.id;
     const name = req.params.name;
     const registration = await Registration.findOne({
@@ -152,12 +152,14 @@ router.post("workshop/:id/:name", async(req, res) => {
         return res.status(200).send({ message:"Registration Succesful",...result });
         // res.redirect(result.body.payment_request.long_url);
       }
+      else{
+        return res.status(400).send({ message:result.message })
+      }
   }
   catch(err){
-
+    console.log(err)
   }
-
-})
+});
 
 router.post("/hackathon", auth, async (req, res) => {
   try {
