@@ -75,7 +75,7 @@ const OAuth2 = google.auth.OAuth2;
 //   }
 // });
 const transporter = nodemailer.createTransport({
-  //host: "smtp.gmail.com",
+  host: "abacus.org.com",
   service: "gmail",
   secure: false,
   auth: {
@@ -143,7 +143,7 @@ const sendVerificationEmail = async (user) => {
         </p>
         <p>
           <a href="http://localhost:3000/Login/VerifyEmail?email=${user.email}&code=${user.verificationCode}">
-          http://localhost:3000/Login#/VerifyEmail?email=${user.email}&code=${user.verificationCode}
+          http://localhost:3000/Login/VerifyEmail?email=${user.email}&code=${user.verificationCode}
           </a>
         </p>
       </div>`,
