@@ -144,7 +144,9 @@ router.put("/workshop/:id/:name", auth, async (req, res) => {
       return res.status(200).send({ ...result });
       // res.redirect(result.body.payment_request.long_url);
     } else {
-      return res.status(400).send({ message: result.message });
+      return res
+        .status(400)
+        .send({ message: result.message, body: result.body });
     }
   } catch (err) {
     console.log(err);

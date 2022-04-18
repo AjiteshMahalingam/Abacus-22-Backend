@@ -54,6 +54,8 @@ const paymentApiCall = async (eventId, eventName, user) => {
       };
     })
     .catch((e) => {
+      console.log("Error: ");
+      console.log(e.response.data);
       return {
         message: "Payment failure",
         body: e,
