@@ -58,7 +58,7 @@ router.post("/googleSignUp", async (req, res) => {
   } = req.body;
   try {
     var user = await User.findOne({ email });
-
+    console.log(user.verificationCode);
     if (user.verificationCode === verificationCode) {
       user.name = name;
       user.phoneNumber = phoneNumber;
