@@ -45,6 +45,7 @@ router.post("/newUser", async (req, res) => {
 // Todo: user verification for updation of data
 
 router.post("/googleSignUp", async (req, res) => {
+  console.log(req.body);
   const {
     email,
     name,
@@ -64,8 +65,8 @@ router.post("/googleSignUp", async (req, res) => {
       user.college = college;
       user.year = year;
       user.department = department;
-      (user.abacusId = Math.floor(Math.random() * 1000000)),
-        (user.password = await bcrypt.hash(password, 8));
+      user.abacusId = Math.floor(Math.random() * 1000000);
+      user.password = await bcrypt.hash(password, 8);
       user.isAccountVerified = true;
       if (college === "Anna university CEG campus Guindy") {
         user.isCegian = true;
@@ -79,6 +80,8 @@ router.post("/googleSignUp", async (req, res) => {
       return res.status(200).send({
         message: "User has been registered. Kindly login.",
       });
+    } else {
+      console.log("Hello");
     }
   } catch (e) {
     console.log(e);

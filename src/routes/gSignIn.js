@@ -25,7 +25,7 @@ const googleSignin = async (req, res, next) => {
         return res.redirect(link);
       } else {
         // incase the user has registered but not verified
-
+        const verificationCode = await user.generateVerificationCode();
         return res.redirect(
           process.env["BASE_FRONTEND_URL"] +
             "/signup" +
@@ -37,6 +37,7 @@ const googleSignin = async (req, res, next) => {
                 name: user.name,
                 type: "signup",
                 googleAuth: true,
+                verificationCode,
                 // token,
               },
             })
