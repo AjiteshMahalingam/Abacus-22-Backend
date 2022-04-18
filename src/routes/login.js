@@ -42,6 +42,7 @@ router.post("/login", async (req, res) => {
       token: token,
       eventPass: user.hasEventPass,
       registrations: user.registrations,
+      workshops: user.workshops,
       college: user.college,
       isCegian: user.isCegian,
     };

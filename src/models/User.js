@@ -83,6 +83,10 @@ const UserSchema = new Schema(
       type: Array,
       default: [],
     },
+    workshops: {
+      type: Array,
+      default: [],
+    },
     hasEventPass: {
       type: Boolean,
       default: false,

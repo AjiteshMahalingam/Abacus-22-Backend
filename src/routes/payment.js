@@ -3,6 +3,7 @@ require("dotenv").config();
 // const auth = require("../middleware/auth");
 const User = require("../models/User");
 const Payment = require("../models/Payment");
+const Registration = require("../models/Registration");
 // const request = require("request");
 const axios = require("axios");
 const { randomUUID } = require("crypto");
@@ -28,7 +29,7 @@ const paymentApiCall = async (eventId, eventName, user) => {
   // const redirect_url = config[eventId].redirect_url;
 
   var payload = {
-    purpose: purpose+" - "+eventName, //to differentiate workshop payments
+    purpose: purpose + " - " + eventName, //to differentiate workshop payments
     amount: amount,
     phone: phone,
     buyer_name: name,
@@ -137,14 +138,107 @@ const webHook = async (req, res) => {
   });
 
   const paymentobject = JSON.parse(JSON.stringify(req.body));
+  const out = await axios
+    .get(
+      process.env["PAYMENT_API_URL"] +
+        "/payments/" +
+        paymentobject.payment_id +
+        "/",
+      {
+        headers: headers,
+      }
+    )
+    .then(async (response) => {
+      if (
+        response.data.success != undefined &&
+        response.data.success === true
+      ) {
+        const payment = await Payment.findOne({
+          email: paymentobject.buyer,
+          purpose: paymentobject.purpose,
+        });
 
-  Payment.findOne({
-    where: {
-      email: paymentobject.buyer,
-      purpose: paymentobject.purpose,
-    },
-  })
+        payment.status = response.data.payment.status;
+        payment.amount = response.data.payment.amount;
+        payment.paymentId = response.data.payment.payment_id;
+
+        await payment.save();
+
+        if (payment.purpose === "Workshop - stock-o-nomics") {
+          try {
+            const user = await User.findOne({
+              email: response.data.payment.buyer_email,
+            });
+            if (user) {
+              const register = new Registration({
+                eventId: 16,
+                type: "workshop",
+                userId: user.abacusId,
+                email: user.email,
+                name: payment.purpose,
+              });
+              console.log(user.email);
+              console.log("before register");
+              await register.save();
+              console.log("after register");
+              user.workshops.push("16");
+              await user.save();
+              logfile.write(
+                "\n[ " + time + " ] SUCCESS : " + JSON.stringify(paymentobject)
+              );
+              return {
+                status: 200,
+                message: "Payment done and registrations added",
+              };
+            } else {
+              logfile.write(
+                "\n[ " +
+                  time +
+                  " ] ERROR : UNAUTHORIZED PAYMENT : " +
+                  JSON.stringify(paymentobject)
+              );
+              return { status: 401, message: "Unauthorized Payment" };
+            }
+          } catch (err) {
+            console.log(err);
+            logfile.write(
+              "\n[ " +
+                time +
+                " ] ERROR : UPDATE CATCH : " +
+                JSON.stringify(paymentobject) +
+                " Encountered Error: " +
+                err
+            );
+            return { status: 400, message: "Unauthorized Payment" };
+          }
+        }
+        return { status: 200, message: "Payment done" };
+      } else {
+        logfile.write(
+          "\n[ " +
+            time +
+            " ] ERROR : NOT REGISTERED : " +
+            JSON.stringify(paymentobject)
+        );
+        return { status: 400, message: "Payment not yet done" };
+      }
+    })
+    .catch((err) => {
+      return err;
+    });
+
+  console.log(out);
+  return res.send(out);
+  // return res.status(out.status).send(out.data);
+  // const payment = await Payment.findOne({
+  //   email: paymentobject.buyer,
+  //   purpose: paymentobject.purpose,
+  // });
+
+  // console.log(payment);
+  /*
     .then((payment) => {
+      console.log(payment);
       if (payment) {
         payment
           .update({
@@ -159,6 +253,24 @@ const webHook = async (req, res) => {
             //   user.hasEventPass = true;
             //   user.save();
             // }
+
+            // console.log(payment);
+
+            if (paymentobject.purpose.includes("Workshop")) {
+              const user = await User.findOne({ email: paymentobject.buyer });
+
+              const register = new Registration({
+                eventId: id,
+                type: "workshop",
+                userId: user.abacusId,
+                email: user.email,
+                name: purpose,
+              });
+              await register.save();
+
+              req.user.workshops.push(id);
+              await req.user.save();
+            }
             logfile.write(
               "\n[ " + time + " ] SUCCESS : " + JSON.stringify(paymentobject)
             );
@@ -196,6 +308,8 @@ const webHook = async (req, res) => {
       );
       return res.status(500).send({ message: "Server Error." });
     });
+
+    */
 };
 
 const paymentConfirmation = async (req, res) => {

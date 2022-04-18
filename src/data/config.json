@@ -1,10 +1,12 @@
 [
   {
     "purpose": "EventPass",
-    "amount": "150"
+    "amount": "150",
+    "name": ""
   },
   {
     "purpose": "Workshop",
-    "amount": "200"
+    "amount": "200",
+    "name": "stock-o-nomics"
   }
 ]

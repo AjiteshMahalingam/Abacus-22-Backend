@@ -14,10 +14,7 @@ const googleSignin = async (req, res, next) => {
       if (user.isAccountVerified) {
         const token = await genToken(user);
         const link = new URL(process.env["BASE_FRONTEND_URL"] + "/login");
-        link.searchParams.append(
-          "message",
-          "Login success, for token check console."
-        );
+        link.searchParams.append("message", "Login success.");
         link.searchParams.append("email", `${user.email}`);
         link.searchParams.append("name", `${user.name}`);
         link.searchParams.append("type", "signin");

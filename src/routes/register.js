@@ -14,7 +14,8 @@ router.get("/", auth, async (req, res) => {
     // console.log(eventsReg);
     return res.status(200).send({
       registrations: req.user.registrations,
-      hasEventPass: req.user.hasEventPass,
+      workshops: req.user.workshops,
+      // hasEventPass: req.user.hasEventPass,
     });
   } catch (err) {
     return res.status(500).send({ error: err.message });
@@ -134,26 +135,13 @@ router.put("/workshop/:id/:name", auth, async (req, res) => {
         amount: details.amount,
         purpose: details.purpose,
         paymentId: details.id,
+        eventId: id,
         status: "Not Paid",
       });
 
       await payment.save();
 
-      const register = new Registration({
-        eventId: id,
-        type: "workshop",
-        userId: req.user.abacusId,
-        email: req.user.email,
-        name: name,
-      });
-      await register.save();
-
-      req.user.registrations.push(id);
-      await req.user.save();
-
-      return res
-        .status(200)
-        .send({ message: "Registration Succesful", ...result });
+      return res.status(200).send({ ...result });
       // res.redirect(result.body.payment_request.long_url);
     } else {
       return res.status(400).send({ message: result.message });
