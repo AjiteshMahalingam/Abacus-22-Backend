@@ -4,7 +4,7 @@ const auth = require("../middleware/auth");
 const Registration = require("../models/Registration");
 const paymentApiCall = require("./payment").paymentApiCall;
 const Payment = require("../models/Payment");
-const {validate, hackRegister} = require("./registerHackathon.js")
+const { validate, hackRegister } = require("./registerHackathon.js");
 
 const router = new express.Router();
 
@@ -67,11 +67,12 @@ router.put("/event/:id/:name", auth, async (req, res) => {
 });
 
 router.put("/eventpass", auth, async (req, res) => {
-    req.user.hasEventPass = true;
-    req.user.save();
-    return res.status(200).send({
-      message: "Event Pass Obtained",
-    });
+  req.user.hasEventPass = true;
+  req.user.save();
+  return res.status(200).send({
+    message: "Event Pass Obtained",
+  });
+  /*
   if (req.user.isCegian === true) {
     req.user.hasEventPass = true;
     req.user.save();
@@ -102,12 +103,11 @@ router.put("/eventpass", auth, async (req, res) => {
     }
     // return res.send(result);
   }
+  */
 });
 
-router.put("/workshop/:id/:name", auth, async(req, res) => {
-  
-  try{
-    
+router.put("/workshop/:id/:name", auth, async (req, res) => {
+  try {
     const id = req.params.id;
     const name = req.params.name;
     const registration = await Registration.findOne({
@@ -115,82 +115,93 @@ router.put("/workshop/:id/:name", auth, async(req, res) => {
       email: req.user.email,
     });
 
-    if (registration) 
-      return res.status(200).send({ message: "Already Registered for event" });
+    if (registration)
+      return res
+        .status(200)
+        .send({ message: "Already Registered for the workshop" });
 
-      const result = await paymentApiCall(1, name, req.user);
-      //console.log(result);
-      if (
-        result.message === "Payment Initiated" &&
-        result.body.success === true
-      ) {
-        const details = result.body.payment_request;
-        const payment = new Payment({
-          email: details.email,
-          name: details.buyer_name,
-          phone: details.phone,
-          amount: details.amount,
-          purpose: details.purpose,
-          paymentId: details.id,
-          status: "Not Paid",
-        });
-  
-        await payment.save();
+    const result = await paymentApiCall(1, name, req.user);
+    //console.log(result);
+    if (
+      result.message === "Payment Initiated" &&
+      result.body.success === true
+    ) {
+      const details = result.body.payment_request;
+      const payment = new Payment({
+        email: details.email,
+        name: details.buyer_name,
+        phone: details.phone,
+        amount: details.amount,
+        purpose: details.purpose,
+        paymentId: details.id,
+        status: "Not Paid",
+      });
 
-        const register = new Registration({
-          eventId: id,
-          type: "workshop",
-          userId: req.user.abacusId,
-          email: req.user.email,
-          name: name,
-        });
-        await register.save();
-  
-        req.user.registrations.push(id);
-        await req.user.save();
-        
-        return res.status(200).send({ message:"Registration Succesful",...result });
-        // res.redirect(result.body.payment_request.long_url);
-      }
-      else{
-        return res.status(400).send({ message:result.message })
-      }
-  }
-  catch(err){
-    console.log(err)
+      await payment.save();
+
+      const register = new Registration({
+        eventId: id,
+        type: "workshop",
+        userId: req.user.abacusId,
+        email: req.user.email,
+        name: name,
+      });
+      await register.save();
+
+      req.user.registrations.push(id);
+      await req.user.save();
+
+      return res
+        .status(200)
+        .send({ message: "Registration Succesful", ...result });
+      // res.redirect(result.body.payment_request.long_url);
+    } else {
+      return res.status(400).send({ message: result.message });
+    }
+  } catch (err) {
+    console.log(err);
   }
 });
 
 router.post("/hackathon", auth, async (req, res) => {
   try {
-
     const user_one = req.body.email_one;
     const user_two = req.body.email_two;
 
-    if(!user_one || !user_two)
-        return res.status(400).send({ message : "Two participants are needed to register for the hackathon" })
+    if (!user_one || !user_two)
+      return res.status(400).send({
+        message: "Two participants are needed to register for the hackathon",
+      });
 
-    if(user_one == user_two)
-        return res.status(400).send({ message : "Please enter two different emails ids" })
+    if (user_one == user_two)
+      return res
+        .status(400)
+        .send({ message: "Please enter two different emails ids" });
 
     const registration = await Registration.findOne({
-        type: "hackathon",
-        email: { $in : [user_one,user_two]},
+      type: "hackathon",
+      email: { $in: [user_one, user_two] },
     });
 
     if (registration) {
-      console.log("Registered already")
-      res.status(200).send({ message: "User " + registration.email + " has been registered already" });
+      console.log("Registered already");
+      res.status(200).send({
+        message: "User " + registration.email + " has been registered already",
+      });
       return;
     }
 
-    const user_details = await validate(user_one,user_two);
-    if(user_details.valid == false)
-        return res.status(400).send({ message : user_details.message })
-    
-    const registration_details = await hackRegister(user_details.user1,user_details.user2);
-    return res.status(registration_details.status).send({ message:registration_details.message });   
+    const user_details = await validate(user_one, user_two);
+    if (user_details.valid == false)
+      return res.status(400).send({ message: user_details.message });
 
+    const registration_details = await hackRegister(
+      user_details.user1,
+      user_details.user2
+    );
+    return res
+      .status(registration_details.status)
+      .send({ message: registration_details.message });
   } catch (err) {
     console.log(err);
     return res.status(400).send({ message: "Unable to register to hackathon" });
