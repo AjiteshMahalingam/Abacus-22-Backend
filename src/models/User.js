@@ -10,7 +10,7 @@ const UserSchema = new Schema(
     abacusId: {
       type: Number,
       required: true,
-      // unique: true,
+      unique: true,
     },
     email: {
       type: String,

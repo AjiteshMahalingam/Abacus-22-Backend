@@ -106,7 +106,7 @@ const sendMail = async (emailOptions) => {
 
     //  const emailTransporter = await createTransporter();
     //  const result = await emailTransporter.sendMail(options);
-    const result = transporter.sendMail(options);
+    const result = await transporter.sendMail(options);
     console.log("Email sent : " + result.response);
 
     return;
@@ -166,4 +166,61 @@ const sendVerificationEmail = async (user) => {
     }
   });
 };
-module.exports = { sendMail, sendVerificationEmail };
+
+const sendHackathonMail = async (user_one, user_two, teamId) => {
+  var mailOptions = {
+    replyTo: process.env["ABACUS_EMAIL"],
+    subject: "Coding Hungama -  Registration - Abacus '22",
+    from: `${process.env.NAME}  ${process.env.ABACUS_EMAIL}`,
+    html: `
+      <div id="EmailBody">
+        <h2>Greetings from CSEA,</h2>
+        <hr />
+        <br />
+        <i>
+          Hello <b>${user_one.name}</b> and <b>${user_two.name}</b>
+        </i>
+        <br />
+        <br />
+       <p>Thank you for registering for the  Coding Hungama. Your team ID is ${teamId}. Kindly show this mail along with your Abacus Ids: [${user_one.abacusId}, ${user_two.abacusId}]  on the day of event. Find attached the details of the event. 
+       </p>
+       <br />
+        <br />
+        <p>Check out our <a href="https://abacus.org.in" target="_blank">Website</a> to learn about the rules of the event and any requirements to bring on the day. We're looking forward to seeing you there. If you have any queries, please do reply to this email. We're happy to help.</p>
+        <br />
+        <p>Best,<p>
+        <p>Team Abacus</p>
+      </div>`,
+  };
+
+  mailOptions.to = user_one.email;
+  transporter.sendMail(mailOptions, (err, data) => {
+    if (err) {
+      console.log({
+        status: "Failed",
+        msg: err,
+      });
+    } else {
+      // console.log("message sent");
+      console.log({
+        status: "success",
+      });
+    }
+  });
+
+  mailOptions.to = user_two.email;
+  transporter.sendMail(mailOptions, (err, data) => {
+    if (err) {
+      console.log({
+        status: "Failed",
+        msg: err,
+      });
+    } else {
+      // console.log("message sent");
+      console.log({
+        status: "success",
+      });
+    }
+  });
+};
+module.exports = { sendMail, sendVerificationEmail, sendHackathonMail };

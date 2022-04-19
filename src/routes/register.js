@@ -175,7 +175,7 @@ router.post("/hackathon", auth, async (req, res) => {
 
     if (registration) {
       console.log("Registered already");
-      res.status(200).send({
+      res.status(400).send({
         message: "User " + registration.email + " has been registered already",
       });
       return;

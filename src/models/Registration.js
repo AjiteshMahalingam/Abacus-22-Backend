@@ -30,8 +30,11 @@ const RegistrationSchema = new Schema(
 
     name: {
       type: String,
-      required: true
-    }
+      required: true,
+    },
+    teamId: {
+      type: Number,
+    },
   },
   {
     timestamps: true,

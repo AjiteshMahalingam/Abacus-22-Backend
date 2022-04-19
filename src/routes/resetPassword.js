@@ -12,8 +12,6 @@ const resetPassword = async (req, res) => {
       .createHash("sha256")
       .update(req.params.resetToken)
       .digest("hex");
-
-    console.log(req.params.resetToken);
     const user = await User.findOne({ resetPasswordToken });
 
     if (user === null || user.resetPasswordExpireTime < datenow) {
@@ -29,9 +27,6 @@ const resetPassword = async (req, res) => {
       console.log("User gave an invalid new and confirm password");
       return;
     }
-
-    console.log(pass);
-    console.log(confirmPass);
     if (pass.length < 7) {
       res
         .status(400)

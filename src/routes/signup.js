@@ -6,6 +6,7 @@ const router = new express.Router();
 const sendVerificationEmail =
   require("../middleware/mailer").sendVerificationEmail;
 const { default: axios } = require("axios");
+const sendMail = require("../middleware/mailer").sendMail;
 
 const dotenv = require("dotenv");
 dotenv.config();
@@ -203,7 +204,7 @@ router.post("/verifyUser", async (req, res) => {
           Team Abacus
           </p>
         </div>`,
-          to: user.email
+          to: user.email,
         });
 
         return res.status(200).send({ message: "User has been verified" });
