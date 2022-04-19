@@ -1,6 +1,8 @@
 const User = require("../models/User");
 const crypto = require("crypto");
 
+const dotenv = require("dotenv");
+dotenv.config();
 const sendMail = require("../middleware/mailer").sendMail;
 const { default: axios } = require("axios");
 
@@ -55,7 +57,7 @@ const forgetPassword = async (req, res) => {
     user.resetPasswordExpireTime = datenow + 10 * 60 * 1000;
     await user.save();
 
-    const url = `${req.protocol}://localhost:3000/resetPassword/${token}`; //had to change the url acc. to ther front end port
+    const url = `${process.env.BASE_FRONTEND_URL}/resetPassword/${token}`; //had to change the url acc. to ther front end port
     //console.log(url)
     await sendMail({
       subject: "Request for password Reset",

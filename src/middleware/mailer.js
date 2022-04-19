@@ -132,20 +132,22 @@ const sendVerificationEmail = async (user) => {
         <hr />
         <br />
         <i>
-          Hello <b>${user.name}</b>
+          Hello <b>${user.name} (Abacus ID = ${user.abacusId})</b>
         </i>
         <br />
         <br />
         <p>
           Click on this
-          <a href="http://localhost:3000/Login/VerifyEmail?email=${user.email}&code=${user.verificationCode}">link</a> or
+          <a href="${process.env.BASE_FRONTEND_URL}/Login/VerifyEmail?email=${user.email}&code=${user.verificationCode}">link</a> or
           copy paste the following in your browser URL to verify your account.
         </p>
         <p>
-          <a href="http://localhost:3000/Login/VerifyEmail?email=${user.email}&code=${user.verificationCode}">
-          http://localhost:3000/Login/VerifyEmail?email=${user.email}&code=${user.verificationCode}
+          <a href="${process.env.BASE_FRONTEND_URL}/Login/VerifyEmail?email=${user.email}&code=${user.verificationCode}">
+          ${process.env.BASE_FRONTEND_URL}/Login/VerifyEmail?email=${user.email}&code=${user.verificationCode}
           </a>
         </p>
+
+        <p>Thanks,<br />Team Abacus</p>
       </div>`,
   };
 
@@ -182,11 +184,10 @@ const sendHackathonMail = async (user_one, user_two, teamId) => {
         </i>
         <br />
         <br />
-       <p>Thank you for registering for the  Coding Hungama. Your team ID is ${teamId}. Kindly show this mail along with your Abacus Ids: [${user_one.abacusId}, ${user_two.abacusId}]  on the day of event. Find attached the details of the event. 
+       <p>Thank you for registering for the  Coding Hungama. Your team ID is ${teamId}. Kindly show this mail along with your Abacus Ids: [${user_one.abacusId}, ${user_two.abacusId}]  on the day of event.
        </p>
        <br />
-        <br />
-        <p>Check out our <a href="https://abacus.org.in" target="_blank">Website</a> to learn about the rules of the event and any requirements to bring on the day. We're looking forward to seeing you there. If you have any queries, please do reply to this email. We're happy to help.</p>
+        <p>Check out our <a href="https://abacus.org.in/events/coding-hungama" target="_blank">Website</a> to learn about the rules of the event and any requirements to bring on the day. We're looking forward to seeing you there. If you have any queries, please do reply to this email. We're happy to help.</p>
         <br />
         <p>Best,<p>
         <p>Team Abacus</p>
