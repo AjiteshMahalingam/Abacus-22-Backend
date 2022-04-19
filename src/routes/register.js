@@ -121,7 +121,7 @@ router.put("/workshop/:id/:name", auth, async (req, res) => {
         .status(200)
         .send({ message: "Already Registered for the workshop" });
 
-    const result = await paymentApiCall(1, name, req.user);
+    const result = await paymentApiCall(id, name, req.user);
     //console.log(result);
     if (
       result.message === "Payment Initiated" &&

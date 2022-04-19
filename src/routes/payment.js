@@ -24,8 +24,8 @@ const paymentApiCall = async (eventId, eventName, user) => {
   const email = user.email;
   const name = user.name;
   const phone = user.phoneNumber;
-  const amount = config[eventId].amount;
-  const purpose = config[eventId].purpose;
+  const amount = config[eventId - 15].amount;
+  const purpose = config[eventId - 15].purpose;
   // const redirect_url = config[eventId].redirect_url;
 
   var payload = {

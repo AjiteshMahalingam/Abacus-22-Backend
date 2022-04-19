@@ -5,9 +5,28 @@ const auth = require("../middleware/auth");
 const router = new express.Router();
 const sendVerificationEmail =
   require("../middleware/mailer").sendVerificationEmail;
+const { default: axios } = require("axios");
 
 router.post("/newUser", async (req, res) => {
-  //console.log(req.body);
+  if (!req.body.captcha)
+    return res.status(400).send({
+      message: "Please select captcha",
+    });
+
+  const secretKey = process.env.CAPTCHA_SECRET;
+
+  const verifyURL = `https://google.com/recaptcha/api/siteverify?secret=${secretKey}&response=${req.body.captcha}&remoteip=${req.connection.remoteAddress}`;
+
+  const body = await axios.get(verifyURL).then((res) => {
+    return res;
+  });
+
+  if (body.success !== undefined && !body.success) {
+    return res.status(400).send({
+      message: "Failed captcha verification",
+    });
+  }
+
   const { email, name, phoneNumber, college, year, department, password } =
     req.body;
 
@@ -24,10 +43,10 @@ router.post("/newUser", async (req, res) => {
   try {
     if (college === "Anna university CEG campus Guindy") {
       user.isCegian = true;
-      user.hasEventPass = true;
     } else {
       user.isCegian = false;
     }
+    user.hasEventPass = true;
     user.password = await bcrypt.hash(user.password, 8);
     await user.generateVerificationCode();
     await user.save();
@@ -45,6 +64,25 @@ router.post("/newUser", async (req, res) => {
 // Todo: user verification for updation of data
 
 router.post("/googleSignUp", async (req, res) => {
+  if (!req.body.captcha)
+    return res.status(400).send({
+      message: "Please select captcha",
+    });
+
+  const secretKey = process.env.CAPTCHA_SECRET;
+
+  const verifyURL = `https://google.com/recaptcha/api/siteverify?secret=${secretKey}&response=${req.body.captcha}&remoteip=${req.connection.remoteAddress}`;
+
+  const body = await axios.get(verifyURL).then((res) => {
+    return res;
+  });
+
+  if (body.success !== undefined && !body.success) {
+    return res.status(400).send({
+      message: "Failed captcha verification",
+    });
+  }
+
   console.log(req.body);
   const {
     email,
@@ -68,9 +106,9 @@ router.post("/googleSignUp", async (req, res) => {
       user.abacusId = Math.floor(Math.random() * 1000000);
       user.password = await bcrypt.hash(password, 8);
       user.isAccountVerified = true;
+      user.hasEventPass = true;
       if (college === "Anna university CEG campus Guindy") {
         user.isCegian = true;
-        user.hasEventPass = true;
       } else {
         user.isCegian = false;
       }

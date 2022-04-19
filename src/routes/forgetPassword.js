@@ -2,8 +2,28 @@ const User = require("../models/User");
 const crypto = require("crypto");
 
 const sendMail = require("../middleware/mailer").sendMail;
+const { default: axios } = require("axios");
 
 const forgetPassword = async (req, res) => {
+  if (!req.body.captcha)
+    return res.status(400).send({
+      message: "Please select captcha",
+    });
+
+  const secretKey = process.env.CAPTCHA_SECRET;
+
+  const verifyURL = `https://google.com/recaptcha/api/siteverify?secret=${secretKey}&response=${req.body.captcha}&remoteip=${req.connection.remoteAddress}`;
+
+  const body = await axios.get(verifyURL).then((res) => {
+    return res;
+  });
+
+  if (body.success !== undefined && !body.success) {
+    return res.status(400).send({
+      message: "Failed captcha verification",
+    });
+  }
+
   try {
     const datenow = Date.now();
     const email = req.body.email;
@@ -20,9 +40,8 @@ const forgetPassword = async (req, res) => {
     );
     if (time_left > 8) {
       res.status(400).send({
-        message:
-          `Email sent already. Try again after
-          ${time_left-8}
+        message: `Email sent already. Try again after
+          ${time_left - 8}
            minutes.`,
       });
       return;

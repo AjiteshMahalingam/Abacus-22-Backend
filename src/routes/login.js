@@ -8,9 +8,29 @@ const { v4: uuidv4 } = require("uuid");
 require("../middleware/gAuth")(passport);
 const auth = require("../middleware/auth");
 const { sendVerificationEmail } = require("../middleware/mailer");
+const { default: axios } = require("axios");
 
 //normal login
 router.post("/login", async (req, res) => {
+  if (!req.body.captcha)
+    return res.status(400).send({
+      message: "Please select captcha",
+    });
+
+  const secretKey = process.env.CAPTCHA_SECRET;
+
+  const verifyURL = `https://google.com/recaptcha/api/siteverify?secret=${secretKey}&response=${req.body.captcha}&remoteip=${req.connection.remoteAddress}`;
+
+  const body = await axios.get(verifyURL).then((res) => {
+    return res;
+  });
+
+  if (body.success !== undefined && !body.success) {
+    return res.status(400).send({
+      message: "Failed captcha verification",
+    });
+  }
+
   const { email, password } = req.body;
 
   try {

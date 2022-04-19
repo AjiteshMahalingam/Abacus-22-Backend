@@ -6,7 +6,12 @@
   },
   {
     "purpose": "Workshop",
-    "amount": "200",
+    "amount": "149",
     "name": "stock-o-nomics"
+  },
+  {
+    "purpose": "Workshop",
+    "amount": "199",
+    "name": "cloud-computing"
   }
 ]
