@@ -59,9 +59,26 @@ const forgetPassword = async (req, res) => {
     //console.log(url)
     await sendMail({
       subject: "Request for password Reset",
-      html: `<p>Use this link to reset your password <a href="${url}">Reset Password</a></p>
-                   <p>Alternately you can use the following link <a href='${url}'>${url}</a></p>
-                   <p>The link will expire in 10 minutes</p>`,
+      html: `
+      <div id="EmailBody">
+      <h2>Welcome to Abacus'22</h2>
+      <hr />
+      <br />
+      <i>
+        Hello <b>${user.name}</b>
+      </i>
+      <br />
+      <br />
+      <p>
+        This mail contains the link to reset your password.
+        Click on this
+        <a href="${url}">Reset Link</a> or
+        copy paste the following URL in your browser to verify your account.
+      </p>
+      <p>
+      <a href='${url}'>${url}</a>
+      </p>
+    </div>`,
       to: email,
     });
     console.log("Response sent to user");

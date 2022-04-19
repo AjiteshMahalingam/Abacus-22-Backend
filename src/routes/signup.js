@@ -7,6 +7,9 @@ const sendVerificationEmail =
   require("../middleware/mailer").sendVerificationEmail;
 const { default: axios } = require("axios");
 
+const dotenv = require("dotenv");
+dotenv.config();
+
 router.post("/newUser", async (req, res) => {
   if (!req.body.captcha)
     return res.status(400).send({
@@ -165,6 +168,31 @@ router.post("/verifyUser", async (req, res) => {
       if (user.verificationCode === data.code) {
         user.isAccountVerified = true;
         await user.save();
+
+        await sendMail({
+          subject: "Thanks for Registering - Abacus '22",
+          html: `
+          <div id="EmailBody">
+          <h2>Greetings from CSEA</h2>
+          <hr />
+          <br />
+          <i>
+            Hello <b>${user.name}</b>
+          </i>
+          <br />
+          <br />
+          <p>
+          Thanks for registering for Abacus - 2022. Your account has been activated successfully. Kindly note the Abacus Id: ${user.abacusId} for your future reference. Check out the events and workshops and enroll yourselves. We're excited to have you join us and hope to see you on the day of Abacus.
+
+          If you have any queries, mail us on ${process.env.NODEMAILER_EMAIL_ID}. We're happy to help. Have a good day.
+          
+          Best,
+          Team Abacus
+          </p>
+        </div>`,
+          to: user.email
+        });
+
         return res.status(200).send({ message: "User has been verified" });
       } else {
         return res.status(403).send({ message: "Wrong verification Code" });
