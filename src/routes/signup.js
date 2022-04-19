@@ -147,7 +147,7 @@ router.post("/googleSignUp", async (req, res) => {
         <p>
         Thanks for registering for Abacus - 2022. Your account has been activated successfully. Kindly note the Abacus Id: ${user.abacusId} for your future reference. Check out the events and workshops and enroll yourselves. We're excited to have you join us and hope to see you on the day of Abacus.
 
-        If you have any queries, mail us on ${process.env.NODEMAILER_EMAIL_ID}. We're happy to help. Have a good day.
+        If you have any queries, mail us on ${process.env.ABACUS_EMAIL}. We're happy to help. Have a good day.
         
         Best,
         Team Abacus
@@ -221,7 +221,7 @@ router.post("/verifyUser", async (req, res) => {
           <p>
           Thanks for registering for Abacus - 2022. Your account has been activated successfully. Kindly note the Abacus Id: ${user.abacusId} for your future reference. Check out the events and workshops and enroll yourselves. We're excited to have you join us and hope to see you on the day of Abacus.
 
-          If you have any queries, mail us on ${process.env.NODEMAILER_EMAIL_ID}. We're happy to help. Have a good day.
+          If you have any queries, mail us on ${process.env.ABACUS_EMAIL}. We're happy to help. Have a good day.
           
           Best,
           Team Abacus
