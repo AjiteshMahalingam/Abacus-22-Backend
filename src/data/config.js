@@ -1,31 +1,31 @@
 exports.paymentConfig = {
   16: {
-    purpose: "Workshop - stock-o-nomics",
+    purpose: "Workshop - Stock-O-Nomics",
     amount: 149.0,
     type: "Workshop",
   },
   17: {
-    purpose: "Workshop - cloud-computing",
+    purpose: "Workshop - Cloud-Computing",
     amount: 199.0,
     type: "Workshop",
   },
   18: {
-    purpose: "Workshop - ar-vr",
+    purpose: "Workshop - AR-VR",
     amount: 149.0,
     type: "Workshop",
   },
 };
 
 exports.purposeConfig = {
-  "Workshop - stock-o-nomics": {
+  "Workshop - Stock-O-Nomics": {
     eventId: 16,
     type: "Workshop",
   },
-  "Workshop - cloud-computing": {
+  "Workshop - Cloud-Computing": {
     eventId: 17,
     type: "Workshop",
   },
-  "Workshop - ar-vr": {
+  "Workshop - AR-VR": {
     eventId: 18,
     type: "Workshop",
   },
