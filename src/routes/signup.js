@@ -30,8 +30,16 @@ router.post("/newUser", async (req, res) => {
     });
   }
 
-  const { email, name, phoneNumber, college, year, department, password } =
-    req.body;
+  const {
+    email,
+    name,
+    phoneNumber,
+    college,
+    year,
+    department,
+    password,
+    accomodation,
+  } = req.body;
 
   const user = new User({
     email,
@@ -42,10 +50,12 @@ router.post("/newUser", async (req, res) => {
     department,
     password,
     abacusId: Math.floor(Math.random() * 1000000),
+    accomodation,
   });
   try {
     if (college === "Anna university CEG campus Guindy") {
       user.isCegian = true;
+      user.accomodation = false;
     } else {
       user.isCegian = false;
     }
@@ -96,6 +106,7 @@ router.post("/googleSignUp", async (req, res) => {
     department,
     password,
     verificationCode,
+    accomodation,
   } = req.body;
   try {
     var user = await User.findOne({ email });
@@ -110,8 +121,10 @@ router.post("/googleSignUp", async (req, res) => {
       user.password = await bcrypt.hash(password, 8);
       user.isAccountVerified = true;
       user.hasEventPass = true;
+      user.accomodation = accomodation;
       if (college === "Anna university CEG campus Guindy") {
         user.isCegian = true;
+        user.accomodation = false;
       } else {
         user.isCegian = false;
       }

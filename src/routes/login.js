@@ -65,6 +65,7 @@ router.post("/login", async (req, res) => {
       workshops: user.workshops,
       college: user.college,
       isCegian: user.isCegian,
+      accomodation: user.accomodation,
     };
     return res.status(200).send({ ...details });
   } catch (err) {

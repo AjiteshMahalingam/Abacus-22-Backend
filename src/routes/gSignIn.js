@@ -21,6 +21,7 @@ const googleSignin = async (req, res, next) => {
         link.searchParams.append("token", `${token}`);
         link.searchParams.append("abacusId", `${user.abacusId}`);
         link.searchParams.append("college", `${user.college}`);
+        link.searchParams.append("accomodation", `${user.accomodation}`);
         console.log("link is ", link.href);
         return res.redirect(link);
       } else {

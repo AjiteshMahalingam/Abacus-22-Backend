@@ -155,8 +155,8 @@ router.put("/workshop/:id/:name", auth, async (req, res) => {
 
 router.post("/hackathon", auth, async (req, res) => {
   try {
-    const user_one = req.body.email_one;
-    const user_two = req.body.email_two;
+    const user_one = req.body.abacusId1;
+    const user_two = req.body.abacusId2;
 
     if (!user_one || !user_two)
       return res.status(400).send({
@@ -166,11 +166,11 @@ router.post("/hackathon", auth, async (req, res) => {
     if (user_one == user_two)
       return res
         .status(400)
-        .send({ message: "Please enter two different emails ids" });
+        .send({ message: "Please enter two different users" });
 
     const registration = await Registration.findOne({
       type: "hackathon",
-      email: { $in: [user_one, user_two] },
+      userId: { $in: [user_one, user_two] },
     });
 
     if (registration) {
