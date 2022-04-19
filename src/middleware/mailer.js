@@ -79,12 +79,12 @@ const transporter = nodemailer.createTransport({
   service: "gmail",
   secure: false,
   auth: {
-    user: process.env["NODEMAILER_EMAIL_ID"],
-    pass: process.env["NODEMAILER_PWD"],
+    user: process.env["ABACUS_EMAIL"],
+    pass: process.env["ABACUS_PWD"],
   },
   tls: {
-         rejectUnauthorized: false,
-     }
+    rejectUnauthorized: false,
+  },
 });
 transporter.verify((error, success) => {
   if (error) {
@@ -101,7 +101,7 @@ const sendMail = async (emailOptions) => {
       //text: emailOptions.text,
       html: emailOptions.html,
       to: emailOptions.to,
-      from: `${process.env["NAME"]} ${process.env["NODEMAILER_EMAIL_ID"]}`
+      from: `${process.env["NAME"]} ${process.env["NODEMAILER_EMAIL_ID"]}`,
     };
 
     //  const emailTransporter = await createTransporter();
@@ -122,10 +122,10 @@ const sendVerificationEmail = async (user) => {
 
   console.log(code);
   var mailOptions = {
-    replyTo: process.env["NODEMAILER_EMAIL_ID"],
+    replyTo: process.env["ABACUS_EMAIL"],
     to: user.email,
     subject: "Verify Email - Abacus '22",
-    from: `${process.env.NAME}  ${process.env.EMAIL}`,
+    from: `${process.env.NAME}  ${process.env.ABACUS_EMAIL}`,
     html: `
       <div id="EmailBody">
         <h2>Welcome to Abacus'22</h2>
