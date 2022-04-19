@@ -82,10 +82,11 @@ const webHook = async (req, res) => {
       }
     )
     .then(async (response) => {
+      console.log(response.data);
       if (
         response.data.success != undefined &&
-        response.data.success === true &&
-        paymentobject.status != "Failed"
+        response.data.success == true &&
+        response.data.payment.status === "Credit"
       ) {
         const payment = await Payment.findOne({
           email: paymentobject.buyer,
