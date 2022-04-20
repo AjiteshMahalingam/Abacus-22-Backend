@@ -9,11 +9,11 @@ exports.paymentConfig = {
     amount: 199.0,
     type: "Workshop",
   },
-  18: {
-    purpose: "Workshop - AR-VR",
-    amount: 149.0,
-    type: "Workshop",
-  },
+  // 18: {
+  //   purpose: "Workshop - AR-VR",
+  //   amount: 149.0,
+  //   type: "Workshop",
+  // },
 };
 
 exports.purposeConfig = {
@@ -25,8 +25,8 @@ exports.purposeConfig = {
     eventId: 17,
     type: "Workshop",
   },
-  "Workshop - AR-VR": {
-    eventId: 18,
-    type: "Workshop",
-  },
+  // "Workshop - AR-VR": {
+  //   eventId: 18,
+  //   type: "Workshop",
+  // },
 };
