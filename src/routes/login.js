@@ -33,6 +33,10 @@ router.post("/login", async (req, res) => {
 
   const { email, password } = req.body;
 
+  if (!email || !password) {
+    return res.status(400).send({ message: "Enter both email and password" });
+  }
+
   try {
     const user = await User.findOne({ email });
     if (!user)
@@ -70,7 +74,7 @@ router.post("/login", async (req, res) => {
     return res.status(200).send({ ...details });
   } catch (err) {
     console.log(err);
-    return res.status(400).send({ message: err });
+    return res.status(400).send({ message: "Error authenticating", err });
   }
 });
 
