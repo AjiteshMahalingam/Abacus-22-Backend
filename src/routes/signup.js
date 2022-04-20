@@ -8,6 +8,7 @@ const sendVerificationEmail =
 const { default: axios } = require("axios");
 const sendMail = require("../middleware/mailer").sendMail;
 
+// const { registerValidator } = require("../utils/validators");
 const dotenv = require("dotenv");
 dotenv.config();
 
@@ -42,18 +43,27 @@ router.post("/newUser", async (req, res) => {
     accomodation,
   } = req.body;
 
-  const user = new User({
-    email,
-    name,
-    phoneNumber,
-    college,
-    year,
-    department,
-    password,
-    abacusId: Math.floor(Math.random() * 1000000),
-    accomodation,
-  });
+  if (email.length < 5 || name.length == 0 || phoneNumber.length != 10) {
+    return res.status(401).send({ message: "Enter valid data for signup" });
+  }
+  if (password.length < 8) {
+    return res
+      .status(401)
+      .send({ message: "Password must be atleast 8 characters long" });
+  }
+
   try {
+    const user = new User({
+      email,
+      name,
+      phoneNumber,
+      college,
+      year,
+      department,
+      password: await bcrypt.hash(password, 8),
+      abacusId: Math.floor(Math.random() * 1000000),
+      accomodation,
+    });
     if (college === "Anna university CEG campus Guindy") {
       user.isCegian = true;
       user.accomodation = false;
@@ -61,7 +71,6 @@ router.post("/newUser", async (req, res) => {
       user.isCegian = false;
     }
     user.hasEventPass = true;
-    user.password = await bcrypt.hash(user.password, 8);
     await user.generateVerificationCode();
     await user.save();
     sendVerificationEmail(user);
@@ -96,8 +105,6 @@ router.post("/googleSignUp", async (req, res) => {
       message: "Failed captcha verification",
     });
   }
-
-  console.log(req.body);
   const {
     email,
     name,

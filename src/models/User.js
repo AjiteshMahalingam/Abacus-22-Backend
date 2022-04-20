@@ -107,7 +107,8 @@ UserSchema.methods.generateVerificationCode = function () {
     this.verificationCode = code;
     return code;
   } catch (e) {
-    throw new Error(e);
+    return { error: e };
+    // throw new Error(e);
   }
 };
 
@@ -120,7 +121,7 @@ UserSchema.methods.generateAuthtoken = async function () {
     );
     return token;
   } catch (e) {
-    throw new Error(e);
+    return { error: e };
   }
 };
 

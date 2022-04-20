@@ -9,7 +9,9 @@ const auth = async (req, res, next) => {
       _id: decoded._id,
       "tokens.token": token,
     });
-    if (!user) throw new Error();
+    if (!user) {
+      return res.status(503).send({ message: "Error authenticating" });
+    }
     req.user = user;
     req.token = token;
     next();
