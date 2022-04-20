@@ -25,7 +25,7 @@ const paymentApiCall = async (eventId, eventName, user) => {
   const name = user.name;
   const phone = user.phoneNumber;
 
-  if (!paymentApiCall[eventId]) {
+  if (!paymentConfig[eventId]) {
     return {
       message: "Payment Failed (invalid event)",
       body: "Invalid Event ID",
