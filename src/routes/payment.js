@@ -24,6 +24,13 @@ const paymentApiCall = async (eventId, eventName, user) => {
   const email = user.email;
   const name = user.name;
   const phone = user.phoneNumber;
+
+  if (!paymentApiCall[eventId]) {
+    return {
+      message: "Payment Failed (invalid event)",
+      body: "Invalid Event ID",
+    };
+  }
   const amount = paymentConfig[eventId].amount;
   const purpose = paymentConfig[eventId].purpose;
   // const redirect_url = config[eventId].redirect_url;
