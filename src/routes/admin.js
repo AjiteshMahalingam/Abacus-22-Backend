@@ -1,5 +1,7 @@
 const express = require("express");
 const Registration = require("../models/Registration");
+const User = require("../models/User");
+const Payment = require("../models/Payment")
 const auth = require("../middleware/auth");
 const csvwriter = require("csv-writer");
 
@@ -39,26 +41,36 @@ router.get("/getdata", async (req, res) => {
     }
 
     const data = await Registration.find({ eventId: eventid });
-
-    // const csvString = [
-    //   ["ID", "Event ID", "User ID", "Type", "Payment Done", "Payment ID"],
-    //   ...data.map((item) => [item._id.toString(), item.eventId, item.userId, item.type, item.isPaymentDone, item.paymentId]),
-    // ]
-    //   .map((e) => e.join(","))
-    //   .join("\n");
-
-    // console.log(csvString);
+    const users = await User.find({});
+    const finalData = data.map(entry => {
+      let value = {}
+      users.forEach(user => {
+        if (entry.userId === user.abacusId) {
+          value = {
+            ...entry,
+            name: user.name,
+            email: user.email,
+            department: user.department,
+            college: user.college,
+            year: user.year
+          }
+        }
+      })
+      return value;
+    });
 
     const path = "registrations-details.csv";
     const csvWriter = csvwriter.createObjectCsvWriter({
       path: path,
       header: [
-        { id: "_id", title: "ID" },
         { id: "eventId", title: "Event id" },
         { id: "userId", title: "User id" },
         { id: "type", title: "Type" },
-        { id: "isPaymentDone", title: "Payment done" },
-        { id: "paymentId", title: "Payment Id" },
+        { id: "name", title: "Name" },
+        { id: "email", title: "Email" },
+        { id: "year", title: "Year" },
+        { id: "department", title: "Department" },
+        { id: "college", title: "College" },
       ],
     });
 
@@ -67,7 +79,69 @@ router.get("/getdata", async (req, res) => {
       "attachment; filename=registrations-details.csv"
     );
     res.set("Content-Type", "text/csv");
-    csvWriter.writeRecords(data).then(() => {
+    csvWriter.writeRecords(finalData).then(() => {
+      res.download(path);
+    });
+  } catch (e) {
+    res.send(e.message);
+  }
+});
+
+router.get("/getusers", async (req, res) => {
+  try {
+    const users = await User.find({});
+
+    const path = "user-details.csv";
+    const csvWriter = csvwriter.createObjectCsvWriter({
+      path: path,
+      header: [
+        { id: "abacusId", title: "Abacus id" },
+        { id: "name", title: "Name" },
+        { id: "email", title: "Email" },
+        { id: "department", title: "Department" },
+        { id: "year", title: "Year" },
+        { id: "college", title: "College" },
+        { id: "phoneNumber", title: "Contact" },
+      ],
+    });
+
+    res.setHeader(
+      "Content-disposition",
+      "attachment; filename=users-details.csv"
+    );
+    res.set("Content-Type", "text/csv");
+    csvWriter.writeRecords(users).then(() => {
+      res.download(path);
+    });
+  } catch (e) {
+    res.send(e.message);
+  }
+});
+
+
+router.get("/getpayments", async (req, res) => {
+  try {
+    const payments = await Payment.find({});
+
+    const path = "payment-details.csv";
+    const csvWriter = csvwriter.createObjectCsvWriter({
+      path: path,
+      header: [
+        { id: "paymentId", title: "Payment ID" },
+        { id: "name", title: "Name" },
+        { id: "email", title: "Email" },
+        { id: "phone", title: "Phone" },
+        { id: "amount", title: "Amount" },
+        { id: "purpose", title: "Purpose" }
+      ],
+    });
+
+    res.setHeader(
+      "Content-disposition",
+      "attachment; filename=payment-details.csv"
+    );
+    res.set("Content-Type", "text/csv");
+    csvWriter.writeRecords(payments).then(() => {
       res.download(path);
     });
   } catch (e) {
