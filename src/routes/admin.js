@@ -1,7 +1,7 @@
 const express = require("express");
 const Registration = require("../models/Registration");
 const User = require("../models/User");
-const Payment = require("../models/Payment")
+const Payment = require("../models/Payment");
 const auth = require("../middleware/auth");
 const csvwriter = require("csv-writer");
 
@@ -30,7 +30,7 @@ router.get("/getdata", async (req, res) => {
     const eventid = req.query.event;
     const password = req.query.password;
 
-    const reqEvent = events.find((e) => e.id === eventid);
+    const reqEvent = events.find((e) => e.id == eventid);
     if (!reqEvent) {
       res.send({ error: "Invalid event id" });
       return;
@@ -42,20 +42,25 @@ router.get("/getdata", async (req, res) => {
 
     const data = await Registration.find({ eventId: eventid });
     const users = await User.find({});
-    const finalData = data.map(entry => {
-      let value = {}
-      users.forEach(user => {
+    const finalData = data.map((entry) => {
+      let value = {};
+      users.forEach((user) => {
         if (entry.userId === user.abacusId) {
+          // console.log(entry);
           value = {
-            ...entry,
+            eventId: eventid,
+            eventName: reqEvent.name,
+            abacusId: user.abacusId,
+            type: entry.type,
             name: user.name,
             email: user.email,
             department: user.department,
             college: user.college,
-            year: user.year
-          }
+            year: user.year,
+          };
         }
-      })
+      });
+
       return value;
     });
 
@@ -63,9 +68,10 @@ router.get("/getdata", async (req, res) => {
     const csvWriter = csvwriter.createObjectCsvWriter({
       path: path,
       header: [
-        { id: "eventId", title: "Event id" },
-        { id: "userId", title: "User id" },
+        { id: "eventId", title: "Event Id" },
+        { id: "abacusId", title: "Abacus id" },
         { id: "type", title: "Type" },
+        { id: "eventName", title: "Event Name" },
         { id: "name", title: "Name" },
         { id: "email", title: "Email" },
         { id: "year", title: "Year" },
@@ -89,6 +95,12 @@ router.get("/getdata", async (req, res) => {
 
 router.get("/getusers", async (req, res) => {
   try {
+    const key = req.query.key;
+
+    if (key != "GKmTdDGN") {
+      res.send({ error: "Incorrect event access credentials" });
+      return;
+    }
     const users = await User.find({});
 
     const path = "user-details.csv";
@@ -118,9 +130,14 @@ router.get("/getusers", async (req, res) => {
   }
 });
 
-
 router.get("/getpayments", async (req, res) => {
   try {
+    const key = req.query.key;
+
+    if (key != "NqfspcLm") {
+      res.send({ error: "Incorrect event access credentials" });
+      return;
+    }
     const payments = await Payment.find({});
 
     const path = "payment-details.csv";
@@ -132,7 +149,8 @@ router.get("/getpayments", async (req, res) => {
         { id: "email", title: "Email" },
         { id: "phone", title: "Phone" },
         { id: "amount", title: "Amount" },
-        { id: "purpose", title: "Purpose" }
+        { id: "purpose", title: "Purpose" },
+        { id: "status", title: "Status" },
       ],
     });
 

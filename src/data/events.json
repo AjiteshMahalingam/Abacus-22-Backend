@@ -1,26 +1,118 @@
 [
   {
-    "id": "1",
-    "password": "abcd"
+    "id": 1,
+    "refName": "reverse-engineering",
+    "name": "Reverse Engineering",
+    "password": "YWvWiNaY"
   },
   {
-    "id": "2",
-    "password": "defg"
+    "id": 2,
+    "refName": "web-design",
+    "name": "Web Design",
+    "password": "HRChFpbr"
   },
   {
-    "id": "3",
-    "password": "hijk"
+    "id": 3,
+    "refName": "capture-the-flag",
+    "name": "Capture the flag",
+    "subname": "Pre-event",
+    "password": "wVMBwiEo"
   },
   {
-    "id": "4",
-    "password": "hijk"
+    "id": 4,
+    "refName": "ospc",
+    "name": "OSPC",
+    "password": "eIyyxvqb"
   },
   {
-    "id": "3",
-    "password": "hijk"
+    "id": 5,
+    "refName": "she-plus-plus",
+    "name": "SHE++",
+    "password": "TwVOqiit"
   },
   {
-    "id": "3",
-    "password": "hijk"
+    "id": 6,
+    "refName": "booting",
+    "name": "Booting",
+    "password": "CqYxfAbw"
+  },
+  {
+    "id": 7,
+    "refName": "get-hired",
+    "name": "Get-Hired",
+    "password": "DReqZQQH"
+  },
+  {
+    "id": 8,
+    "refName": "brainstormiz-technicalQuiz",
+    "name": "Brainstormiz - Tech Quiz",
+    "password": "mYvVtGud"
+  },
+  {
+    "id": 9,
+    "refName": "deadlock-opener",
+    "name": "Deadlock Opener",
+    "password": "BtkKAixk"
+  },
+  {
+    "id": 10,
+    "refName": "olpc",
+    "name": "OLPC",
+    "subname": "Pre-event",
+    "password": "mQlcMKPS"
+  },
+  {
+    "id": 15,
+    "refName": "ipl-auction",
+    "name": "IPL Auction",
+    "password": "BxePVGsu"
+  },
+  {
+    "id": 11,
+    "refName": "ship-wreck",
+    "name": "Ship-Wreck",
+    "password": "JuGdzicY"
+  },
+  {
+    "id": 12,
+    "refName": "design-a-thon",
+    "name": "Design-a-thon",
+    "password": "NzQULJUc"
+  },
+  {
+    "id": 14,
+    "refName": "thadam",
+    "name": "Thadam",
+    "password": "XtliWnRU"
+  },
+  {
+    "id": 13,
+    "refName": "kuiz",
+    "name": "KUIZ",
+    "password": "lsVZRpqS"
+  },
+  {
+    "id": 20,
+    "refName": "treasure-hunt",
+    "name": "Treasure Hunt",
+    "password": "hsByitAh"
+  },
+  {
+    "id": 19,
+    "refName": "coding-hungama",
+    "name": "Coding Hungama - All Night Event",
+    "password": "OjmACOrU"
+  },
+  {
+    "id": 17,
+    "refName": "cloud-computing-beyond-coding",
+    "name": "Cloud Computing",
+    "password": "IZfJKjLB"
+  },
+  {
+    "id": 16,
+    "refName": "stock-o-nomics",
+    "name": "Stock-O-Nomics",
+    "password": "BgjwSGgv"
   }
 ]
