@@ -169,4 +169,30 @@ router.get("/getpayments", async (req, res) => {
   }
 });
 
+router.get("/getuserdata", async (req, res) => {
+  try {
+    const abacusId = req.query.abacusId;
+    const user = await User.findOne({ abacusId });
+
+    const registrations = await Registration.find({ userId: abacusId });
+    const payments = await Payment.find({ email: user.email });
+
+    return res.status(200).send({
+      user: {
+        name: user.name,
+        email: user.name,
+        abacusId: user.abacusId,
+        accomodationNeeded: user.accomodation,
+        phoneNumber: user.phoneNumber,
+        college: user.college,
+        department: user.department,
+        year: user.year,
+      },
+      registrations: registrations,
+      payments: payments,
+    });
+  } catch (e) {
+    return res.status(400).send(e);
+  }
+});
 module.exports = router;
