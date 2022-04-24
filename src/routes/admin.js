@@ -184,7 +184,7 @@ router.get("/getpayments", async (req, res) => {
     res.send(e.message);
   }
 });
-
+/*
 router.get("/getuserdata", async (req, res) => {
   try {
     const abacusId = req.query.abacusId;
@@ -211,4 +211,5 @@ router.get("/getuserdata", async (req, res) => {
     return res.status(400).send(e);
   }
 });
+*/
 module.exports = router;

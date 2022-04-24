@@ -47,7 +47,7 @@ router.post("/newUser", async (req, res) => {
     return res.status(401).send({ message: "Enter valid data for signup" });
   }
 
-  if (college.length == 0 || !year) {
+  if (college.length == 0 || !year || department.length == 0) {
     return res.status(401).send({ message: "Enter valid data for signup" });
   }
   if (password.length < 8) {
