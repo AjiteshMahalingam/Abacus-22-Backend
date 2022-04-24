@@ -29,6 +29,7 @@ router.get("/getdata", async (req, res) => {
   try {
     const eventid = req.query.event;
     const password = req.query.password;
+    const download = req.query.download;
 
     const reqEvent = events.find((e) => e.id == eventid);
     if (!reqEvent) {
@@ -65,31 +66,35 @@ router.get("/getdata", async (req, res) => {
       return value;
     });
 
-    const path = "registrations-details.csv";
-    const csvWriter = csvwriter.createObjectCsvWriter({
-      path: path,
-      header: [
-        { id: "eventId", title: "Event Id" },
-        { id: "abacusId", title: "Abacus id" },
-        { id: "type", title: "Type" },
-        { id: "eventName", title: "Event Name" },
-        { id: "name", title: "Name" },
-        { id: "email", title: "Email" },
-        { id: "year", title: "Year" },
-        { id: "department", title: "Department" },
-        { id: "college", title: "College" },
-        { id: "phone", title: "Phone Number" },
-      ],
-    });
+    if (download === "false") {
+      return res.status(200).send(finalData);
+    } else {
+      const path = "registrations-details.csv";
+      const csvWriter = csvwriter.createObjectCsvWriter({
+        path: path,
+        header: [
+          { id: "eventId", title: "Event Id" },
+          { id: "abacusId", title: "Abacus id" },
+          { id: "type", title: "Type" },
+          { id: "eventName", title: "Event Name" },
+          { id: "name", title: "Name" },
+          { id: "email", title: "Email" },
+          { id: "year", title: "Year" },
+          { id: "department", title: "Department" },
+          { id: "college", title: "College" },
+          { id: "phone", title: "Phone Number" },
+        ],
+      });
 
-    res.setHeader(
-      "Content-disposition",
-      "attachment; filename=registrations-details.csv"
-    );
-    res.set("Content-Type", "text/csv");
-    csvWriter.writeRecords(finalData).then(() => {
-      res.download(path);
-    });
+      res.setHeader(
+        "Content-disposition",
+        "attachment; filename=registrations-details.csv"
+      );
+      res.set("Content-Type", "text/csv");
+      csvWriter.writeRecords(finalData).then(() => {
+        res.download(path);
+      });
+    }
   } catch (e) {
     res.send(e.message);
   }
@@ -98,6 +103,7 @@ router.get("/getdata", async (req, res) => {
 router.get("/getusers", async (req, res) => {
   try {
     const key = req.query.key;
+    const download = req.query.download;
 
     if (key != "GKmTdDGN") {
       res.send({ error: "Incorrect event access credentials" });
@@ -105,28 +111,32 @@ router.get("/getusers", async (req, res) => {
     }
     const users = await User.find({});
 
-    const path = "user-details.csv";
-    const csvWriter = csvwriter.createObjectCsvWriter({
-      path: path,
-      header: [
-        { id: "abacusId", title: "Abacus id" },
-        { id: "name", title: "Name" },
-        { id: "email", title: "Email" },
-        { id: "department", title: "Department" },
-        { id: "year", title: "Year" },
-        { id: "college", title: "College" },
-        { id: "phoneNumber", title: "Contact" },
-      ],
-    });
+    if (download === "false") {
+      return res.status(200).send(users);
+    } else {
+      const path = "user-details.csv";
+      const csvWriter = csvwriter.createObjectCsvWriter({
+        path: path,
+        header: [
+          { id: "abacusId", title: "Abacus id" },
+          { id: "name", title: "Name" },
+          { id: "email", title: "Email" },
+          { id: "department", title: "Department" },
+          { id: "year", title: "Year" },
+          { id: "college", title: "College" },
+          { id: "phoneNumber", title: "Contact" },
+        ],
+      });
 
-    res.setHeader(
-      "Content-disposition",
-      "attachment; filename=users-details.csv"
-    );
-    res.set("Content-Type", "text/csv");
-    csvWriter.writeRecords(users).then(() => {
-      res.download(path);
-    });
+      res.setHeader(
+        "Content-disposition",
+        "attachment; filename=users-details.csv"
+      );
+      res.set("Content-Type", "text/csv");
+      csvWriter.writeRecords(users).then(() => {
+        res.download(path);
+      });
+    }
   } catch (e) {
     res.send(e.message);
   }
@@ -136,34 +146,40 @@ router.get("/getpayments", async (req, res) => {
   try {
     const key = req.query.key;
 
+    const download = req.query.download;
+
     if (key != "NqfspcLm") {
       res.send({ error: "Incorrect event access credentials" });
       return;
     }
     const payments = await Payment.find({});
 
-    const path = "payment-details.csv";
-    const csvWriter = csvwriter.createObjectCsvWriter({
-      path: path,
-      header: [
-        { id: "paymentId", title: "Payment ID" },
-        { id: "name", title: "Name" },
-        { id: "email", title: "Email" },
-        { id: "phone", title: "Phone" },
-        { id: "amount", title: "Amount" },
-        { id: "purpose", title: "Purpose" },
-        { id: "status", title: "Status" },
-      ],
-    });
+    if (download === "false") {
+      return res.status(200).send(payments);
+    } else {
+      const path = "payment-details.csv";
+      const csvWriter = csvwriter.createObjectCsvWriter({
+        path: path,
+        header: [
+          { id: "paymentId", title: "Payment ID" },
+          { id: "name", title: "Name" },
+          { id: "email", title: "Email" },
+          { id: "phone", title: "Phone" },
+          { id: "amount", title: "Amount" },
+          { id: "purpose", title: "Purpose" },
+          { id: "status", title: "Status" },
+        ],
+      });
 
-    res.setHeader(
-      "Content-disposition",
-      "attachment; filename=payment-details.csv"
-    );
-    res.set("Content-Type", "text/csv");
-    csvWriter.writeRecords(payments).then(() => {
-      res.download(path);
-    });
+      res.setHeader(
+        "Content-disposition",
+        "attachment; filename=payment-details.csv"
+      );
+      res.set("Content-Type", "text/csv");
+      csvWriter.writeRecords(payments).then(() => {
+        res.download(path);
+      });
+    }
   } catch (e) {
     res.send(e.message);
   }
