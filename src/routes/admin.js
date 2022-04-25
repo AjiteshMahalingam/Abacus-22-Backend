@@ -83,6 +83,7 @@ router.get("/getdata", async (req, res) => {
           { id: "department", title: "Department" },
           { id: "college", title: "College" },
           { id: "phone", title: "Phone Number" },
+          { id: "teamId", title: "Team Id" },
         ],
       });
 
@@ -125,6 +126,7 @@ router.get("/getusers", async (req, res) => {
           { id: "year", title: "Year" },
           { id: "college", title: "College" },
           { id: "phoneNumber", title: "Contact" },
+          { id: "accomodation", title: "Accomodation Required?" },
         ],
       });
 
