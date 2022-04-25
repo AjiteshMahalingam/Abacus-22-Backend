@@ -42,6 +42,11 @@ router.put("/event/:id/:name", auth, async (req, res) => {
       return;
     }
     try {
+      if (id == 6 && req.user.year != 1) {
+        return res
+          .status(400)
+          .send({ message: "Only first years are allowed" });
+      }
       const register = new Registration({
         eventId: id,
         type: "event",
