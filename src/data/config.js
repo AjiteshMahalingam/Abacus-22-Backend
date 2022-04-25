@@ -14,6 +14,11 @@ exports.paymentConfig = {
   //   amount: 149.0,
   //   type: "Workshop",
   // },
+  22: {
+    purpose: "Workshop - Into AI-ML and GeoAI",
+    amount: 50.0,
+    type: "Workshop",
+  },
 };
 
 exports.purposeConfig = {
@@ -23,6 +28,10 @@ exports.purposeConfig = {
   },
   "Workshop - Cloud-Computing": {
     eventId: 17,
+    type: "Workshop",
+  },
+  "Workshop - Into AI-ML and GeoAI": {
+    eventId: 22,
     type: "Workshop",
   },
   // "Workshop - AR-VR": {
