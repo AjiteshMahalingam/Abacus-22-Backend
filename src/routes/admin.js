@@ -187,10 +187,17 @@ router.get("/getpayments", async (req, res) => {
     res.send(e.message);
   }
 });
-/*
-router.get("/getuserdata", async (req, res) => {
+
+router.post("/getuserdata", async (req, res) => {
   try {
-    const abacusId = req.query.abacusId;
+    const abacusId = req.body.abacusId;
+    const key = req.body.key;
+
+    if (key != "DrqNNyTcWqdXJciZ") {
+      return res.status(401).send({
+        message: "Unauthorized Access",
+      });
+    }
     const user = await User.findOne({ abacusId });
 
     const registrations = await Registration.find({ userId: abacusId });
@@ -199,7 +206,7 @@ router.get("/getuserdata", async (req, res) => {
     return res.status(200).send({
       user: {
         name: user.name,
-        email: user.name,
+        email: user.email,
         abacusId: user.abacusId,
         accomodationNeeded: user.accomodation,
         phoneNumber: user.phoneNumber,
@@ -214,5 +221,5 @@ router.get("/getuserdata", async (req, res) => {
     return res.status(400).send(e);
   }
 });
-*/
+
 module.exports = router;
