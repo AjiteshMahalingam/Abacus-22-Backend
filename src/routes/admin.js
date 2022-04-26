@@ -59,6 +59,7 @@ router.get("/getdata", async (req, res) => {
             college: user.college,
             year: user.year,
             phone: user.phoneNumber,
+            teamId: entry.teamId,
           };
         }
       });
