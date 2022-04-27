@@ -215,6 +215,7 @@ router.post("/verifyUser", async (req, res) => {
     } else if (!user.isAccountVerified) {
       if (user.verificationCode === data.code) {
         user.isAccountVerified = true;
+        user.hasEventPass = true;
         await user.save();
 
         await sendMail({

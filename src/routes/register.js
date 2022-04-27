@@ -37,10 +37,10 @@ router.put("/event/:id/:name", auth, async (req, res) => {
       return;
     }
 
-    if (req.user.hasEventPass == false) {
-      res.status(400).send({ message: "Event pass not retrieved" });
-      return;
-    }
+    // if (req.user.hasEventPass == false) {
+    //   res.status(400).send({ message: "Event pass not retrieved" });
+    //   return;
+    // }
     try {
       if (id == 6 && req.user.year != 1) {
         return res
